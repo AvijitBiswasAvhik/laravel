@@ -175,3 +175,13 @@
     background-color: #7258DB  !important;
     border-radius: 0px !important;
 }
+/* style inpormation icons */
+.right-icon{
+    font-size: 25px;
+}
+.left-info{
+    color: rgb(85, 84, 84);
+    font-family: 'Old';
+    font-size: 16px;
+    letter-spacing: 1px;
+}

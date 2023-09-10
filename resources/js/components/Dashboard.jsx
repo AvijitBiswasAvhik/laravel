@@ -12,7 +12,9 @@ import {
     faCalculator,
     faFaceSmile,
     faShop,
-    faFilter
+    faFilter,
+    faPerson,
+    faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Dashboard() {
@@ -169,9 +171,13 @@ export default function Dashboard() {
                                             </a>
                                         </li>
                                         <li className="nab-item">
-                                        <a href="#" className="nav-link" data-bs-toggle="tab">
-                                            Year
-                                        </a>
+                                            <a
+                                                href="#"
+                                                className="nav-link"
+                                                data-bs-toggle="tab"
+                                            >
+                                                Year
+                                            </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -183,8 +189,120 @@ export default function Dashboard() {
                                         className="form-control"
                                     />
                                     <button className="btn btn-primary">
-                                    <FontAwesomeIcon icon={faFilter} />
+                                        <FontAwesomeIcon icon={faFilter} />
                                     </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row mt-3">
+                            <div className="col-sm-6 col-md-4 p-2">
+                                <div className="card">
+                                    <div className="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                                        <div className="left-info">
+                                            Customer
+                                        </div>
+                                        <div className="right-icon">
+                                            <FontAwesomeIcon
+                                                icon={faPerson}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-6 col-md-4 p-2">
+                                <div className="card">
+                                    <div className="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                                        <div className="left-info">
+                                            Order
+                                        </div>
+                                        <div className="right-icon">
+                                        <FontAwesomeIcon icon={faCartShopping} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-6 col-md-4 p-2">
+                                <div className="card">
+                                    <div className="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                                        <div className="left-info">
+                                            Avg Item Sale
+                                        </div>
+                                        <div className="right-icon">
+                                            <FontAwesomeIcon icon={faPerson} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-6 col-md-4 p-2">
+                                <div className="card">
+                                    <div className="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                                        <div className="left-info">
+                                            Customer
+                                        </div>
+                                        <div className="right-icon">
+                                            <FontAwesomeIcon icon={faPerson} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-6 col-md-4 p-2">
+                                <div className="card">
+                                    <div className="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                                        <div className="left-info">
+                                            Customer
+                                        </div>
+                                        <div className="right-icon">
+                                            <FontAwesomeIcon icon={faPerson} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-6 col-md-4 p-2">
+                                <div className="card">
+                                    <div className="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                                        <div className="left-info">
+                                            Customer
+                                        </div>
+                                        <div className="right-icon">
+                                            <FontAwesomeIcon icon={faPerson} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-6 col-md-4 p-2">
+                                <div className="card">
+                                    <div className="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                                        <div className="left-info">
+                                            Customer
+                                        </div>
+                                        <div className="right-icon">
+                                            <FontAwesomeIcon icon={faPerson} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-6 col-md-4 p-2">
+                                <div className="card">
+                                    <div className="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                                        <div className="left-info">
+                                            Customer
+                                        </div>
+                                        <div className="right-icon">
+                                            <FontAwesomeIcon icon={faPerson} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-sm-6 col-md-4 p-2">
+                                <div className="card">
+                                    <div className="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
+                                        <div className="left-info">
+                                            Customer
+                                        </div>
+                                        <div className="right-icon">
+                                            <FontAwesomeIcon icon={faPerson} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
