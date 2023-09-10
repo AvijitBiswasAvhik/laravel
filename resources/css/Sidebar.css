@@ -1,0 +1,22 @@
+#sidebar-dashboard{
+    background-color: #7258DB;
+    border-radius: 5px;
+    box-shadow: 3px 3px 8px grey;
+}
+.sidebar-list-menu{
+    list-style-type: none;
+    left: -20px;
+    position: relative;
+}
+.sidebar-list-menu .sidebar-menu{
+    gap: 10px;
+    height: 42px;
+    font-size: 18px;
+    color: aliceblue;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.sidebar-list-menu .sidebar-menu:hover{
+    background-color: #56449e;
+}
