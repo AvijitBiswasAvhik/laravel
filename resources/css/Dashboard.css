@@ -98,6 +98,12 @@
 .dashboard-menu-toggle{
     font-size: 25px;
     padding-right: 10px;
+    cursor: pointer;
+    transition: .5s;
+}
+.dashboard-menu-toggle:hover{
+    color: rgb(91, 91, 236);
+    transition: .5s;
 }
 @media screen and (min-width: 720px){
     .dashboard-col:nth-child(2){
@@ -112,22 +118,23 @@
     padding: 0px ;
     display: none;
     font-family: 'Arapey';
+    
 }
 @media screen and (min-width: 992px) {
     .sidebar{
         display: block;
     }
-    .main-content-dashboard{
+    /* .main-content-dashboard{
 
-    }
+    } */
     .dashboard-menu-toggle{
         display: none;
     }
 }
 
 /*style revenue-expense */
-.revenue-expense{
-}
+/* .revenue-expense{
+} */
 .middle-man{
     height: 75px;
     display: flex;
@@ -166,10 +173,10 @@
     border: 1px solid #7258DB ;
     border-radius: 5px;
 }
-.dashboard-date-category-ul .nab-item{
+/* .dashboard-date-category-ul .nab-item{
     
 
-}
+} */
 .active{
     border: 1px solid #7258DB !important;
     background-color: #7258DB  !important;
@@ -178,6 +185,7 @@
 /* style inpormation icons */
 .right-icon{
     font-size: 25px;
+    color: #ee8f00;
 }
 .left-info{
     color: rgb(85, 84, 84);

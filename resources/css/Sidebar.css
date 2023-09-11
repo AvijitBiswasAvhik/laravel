@@ -10,13 +10,18 @@
 }
 .sidebar-list-menu .sidebar-menu{
     gap: 10px;
-    height: 42px;
     font-size: 18px;
     color: aliceblue;
-    display: flex;
-    align-items: center;
     cursor: pointer;
+    
 }
-.sidebar-list-menu .sidebar-menu:hover{
-    background-color: #56449e;
+.sidebar-list-menu .sidebar-menu a{
+    text-decoration: none;
+    color: white;
+}
+.sidebar-list-menu .sidebar-menu ul{
+    list-style-type: none;
+}
+.active{
+    color: #d9db58 !important;
 }

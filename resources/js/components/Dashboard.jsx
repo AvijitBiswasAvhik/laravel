@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import "../../css/Dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Sidebar from "./Sidebar";
+import ActiveUser from "./ActiveUser";
+
 import {
     faSearch,
     faBars,
@@ -18,6 +20,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Dashboard() {
+    const [showSidebar, setShowSidebar] = useState(false);
     const [element, setElement] = useState();
     useEffect(() => {
         setElement(document.querySelectorAll(".middle-man-co"));
@@ -28,6 +31,33 @@ export default function Dashboard() {
             element.style.backgroundColor = color[i];
         });
     }
+
+    // sahow and hide side bar
+    function showHide(e) {
+        setShowSidebar(!showSidebar);
+        console.log("hello");
+    }
+    useEffect(() => {
+        let sidebar = document.querySelector(".sidebar");
+        if (showSidebar == true) {
+            
+            sidebar.style.display = "block";
+        } else {
+            sidebar.style.display = "none";
+        }
+        window.addEventListener("resize", (e) => {
+            if(window.innerWidth >= 980){
+                sidebar.style = {
+                    display: "block",
+                    transition: ".5s"
+            };
+            }else if(window.innerWidth <= 979){
+                sidebar.style.display = "none";
+            }
+        });
+        
+    }, [showSidebar]);
+
     return (
         <div id="dashboard-container" className="container">
             <div className="row justify-content-center">
@@ -84,7 +114,10 @@ export default function Dashboard() {
                                         </div>
                                     </li>
                                 </ul>
-                                <div className="dashboard-menu-toggle">
+                                <div
+                                    className="dashboard-menu-toggle"
+                                    onClick={(e) => showHide(e)}
+                                >
                                     <FontAwesomeIcon icon={faBars} />
                                 </div>
                             </div>
@@ -202,9 +235,7 @@ export default function Dashboard() {
                                             Customer
                                         </div>
                                         <div className="right-icon">
-                                            <FontAwesomeIcon
-                                                icon={faPerson}
-                                            />
+                                            <FontAwesomeIcon icon={faPerson} />
                                         </div>
                                     </div>
                                 </div>
@@ -212,11 +243,11 @@ export default function Dashboard() {
                             <div className="col-sm-6 col-md-4 p-2">
                                 <div className="card">
                                     <div className="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
-                                        <div className="left-info">
-                                            Order
-                                        </div>
+                                        <div className="left-info">Order</div>
                                         <div className="right-icon">
-                                        <FontAwesomeIcon icon={faCartShopping} />
+                                            <FontAwesomeIcon
+                                                icon={faCartShopping}
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -305,6 +336,9 @@ export default function Dashboard() {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div className="row active-user-section">
+                            <ActiveUser />
                         </div>
                     </div>
                 </div>
