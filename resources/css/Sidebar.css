@@ -2,6 +2,8 @@
     background-color: #7258DB;
     border-radius: 5px;
     box-shadow: 3px 3px 8px grey;
+    position: sticky;
+    top: 0;
 }
 .sidebar-list-menu{
     list-style-type: none;

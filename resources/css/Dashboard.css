@@ -22,7 +22,9 @@
     font-family: 'Old';
     font-size: 20px;
     font-weight: bold;
+    
 }
+
 /*end style sidebar*/
 .dashboard-col:nth-child(1){
     display: flex;

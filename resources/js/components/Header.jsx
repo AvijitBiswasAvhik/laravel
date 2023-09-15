@@ -24,7 +24,7 @@ export default function Header({showSidebar, setShowSidebar}) {
     }
     return (
         <>
-            <div className="col-md-4 dashboard-col">
+            <div className="col-md-4 dashboard-col header">
                 <input
                     type="search"
                     name="search"

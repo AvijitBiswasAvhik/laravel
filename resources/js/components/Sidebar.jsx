@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "../../css/Sidebar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import MyReactComponent from "./MyReactComponent";
+import SubDashboard from "./SubDashboard";
+import ProductAdd from "./product/ProductAdd";
+import ProductList from "./product/ProductList";
 import {
     faHouse,
     faTruckFast,
@@ -13,7 +17,7 @@ import {
     faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-export default function Sidebar() {
+export default function Sidebar(components) {
     function activeLink(e) {
         console.log(e.currentTarget);
         let currentElement = e.currentTarget;
@@ -23,10 +27,26 @@ export default function Sidebar() {
             if (e.target.parentNode.id == element.id) {
                 console.log(e.target.parentNode.id);
                 element.classList.add("actives");
+                console.log(element.dataset.id);
+                if (element.dataset.id) {
+                    let key = element.dataset.id;
+                    switch (key) {
+                        case "ProductAdd":
+                            components.setCurrentComponent(<ProductAdd />);
+                            break;
+                        case "ProductCategory":
+                            components.setCurrentComponent(<SubDashboard />);
+                            break;
+                        case "ProductList":
+                            components.setCurrentComponent(<ProductList />);
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         });
     }
-
     return (
         <div id="sidebar-dashboard">
             <ul className="sidebar-list-menu">
@@ -58,17 +78,29 @@ export default function Sidebar() {
                             className="sub-menu collapse"
                             onClick={(e) => activeLink(e)}
                         >
-                            <li className="nab-item" id="1">
+                            <li
+                                className="nab-item"
+                                id="1"
+                                data-id="ProductList"
+                            >
                                 <a href="#" className="nav-link">
                                     product list
                                 </a>
                             </li>
-                            <li className="nab-item" id="2">
+                            <li
+                                className="nab-item"
+                                id="2"
+                                data-id="ProductCategory"
+                            >
                                 <a href="#" className="nav-link">
                                     product category
                                 </a>
                             </li>
-                            <li className="nab-item" id="3">
+                            <li
+                                className="nab-item"
+                                id="3"
+                                data-id="ProductAdd"
+                            >
                                 <a href="#" className="nav-link">
                                     product add
                                 </a>
@@ -97,7 +129,7 @@ export default function Sidebar() {
                                     category list
                                 </a>
                             </li>
-                            <li className="nab-item" id="2">
+                            <li className="nab-item" id="2" data-id>
                                 <a href="#" className="nav-link">
                                     category edith
                                 </a>
