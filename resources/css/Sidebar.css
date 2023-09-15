@@ -25,3 +25,11 @@
 .active{
     color: #d9db58 !important;
 }
+.actives{
+    background-color: #4f2b64;
+    padding: 3px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px grey;
+    border: none;
+}

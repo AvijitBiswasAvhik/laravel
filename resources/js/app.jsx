@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-
+import { BrowserRouter as Router,Routes, Route } from 'react-router-dom'; 
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -14,7 +14,7 @@ import './bootstrap';
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-import Example from './components/Dashboard';
+
 import Dashboard from './components/Dashboard';
 
 if (document.getElementById('app')) {
