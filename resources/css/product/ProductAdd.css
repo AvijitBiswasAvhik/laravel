@@ -1,0 +1,26 @@
+@font-face {
+    font-family: 'Arapey';
+    src: url('../../font/Arapey/Arapey-Regular.ttf');
+}
+#product-add{
+    background-color: #F5F5F9;
+}
+.product-add{
+   
+}
+.add-product-title-box h4{
+    font-family: 'Arapey';
+    font-weight: lighter;
+}
+#btnBrowse{
+    background-color: #E7E7FF;
+    margin:  0 auto;
+    color: #7577FF;
+}
+/* design custom toggle switch */
+#custom-toggle-switch{
+    height: 20px;
+    border:1px solid black;
+    width: 40px;
+    border-radius: 10px;
+}

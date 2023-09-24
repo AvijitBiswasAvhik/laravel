@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "../../css/Dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Sidebar from "./Sidebar";
-
+import SubDashboard from "./SubDashboard";
 import Header from "./Header";
 
 
@@ -65,7 +65,7 @@ export default function Dashboard() {
                                     setShowSidebar={setShowSidebar}
                                 />
                             </div>
-                            {currentComponent}
+                            {currentComponent == null ? <SubDashboard /> : currentComponent}
                         </div>
                     </div>
                 </div>
