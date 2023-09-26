@@ -1,7 +1,57 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "../../../css/product/ProductAdd.css";
 
 export default function ProductAdd() {
+    let [buttonToggle, setButtonToggle] = useState(true);
+    let [formData, setFormData] = useState({
+        name: "",
+        sku: "",
+        barCode: "",
+        description: "",
+        image: { imageTitle: "", imageFile: "" },
+        details: {
+            weight: "",
+            size: { width: "", height: "" },
+            category: "",
+            status: "",
+        },
+        price: {
+            basePrice: "",
+            discountPrice: "",
+            tax: false,
+            stock: true,
+        },
+    });
+    let buttonOn = {
+        butttonToggle: { translate: "100%", transition: ".5s" },
+        butttonSwitch: { backgroundColor: "#450BA5", transition: ".5s" },
+    };
+    let buttonOff = {
+        buttonToggle: { translate: "0", transition: ".5s" },
+        butttonSwitch: { backgroundColor: "grey", transition: ".5s" },
+    };
+    function setButtonToggleFunc() {
+        setButtonToggle(!buttonToggle);
+    }
+    ///// FORM HANDLE //////
+    ////////////////////////
+    let imageUploaded = (e) => {
+        let imageShow = document.querySelector('.product-image-show');
+        const file = e.target.files[0];
+        console.log(file);
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imageShow.src = e.target.result; // Corrected typo here
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    
+    ////END FORM HANDLE ///
+    ///////////////////////
+
     return (
         <div id="product-add" className="container">
             <div className="row">
@@ -68,6 +118,13 @@ export default function ProductAdd() {
                                         placeholder="Product title"
                                         name="productName"
                                         aria-label="productTitle"
+                                        value={formData.name}
+                                        onChange={(e) => {
+                                            setFormData({
+                                                ...formData,
+                                                name: e.target.value,
+                                            });
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -86,6 +143,13 @@ export default function ProductAdd() {
                                         placeholder="SKU"
                                         name="productSku"
                                         aria-label="Product SKU"
+                                        value={formData.sku}
+                                        onChange={(e) => {
+                                            setFormData({
+                                                ...formData,
+                                                sku: e.target.value,
+                                            });
+                                        }}
                                     />
                                 </div>
                                 <div className="col">
@@ -101,6 +165,13 @@ export default function ProductAdd() {
                                         className="form-control"
                                         placeholder="0123-456"
                                         aria-label="Product Barcode"
+                                        value={formData.barCode}
+                                        onChange={(e) => {
+                                            setFormData({
+                                                ...formData,
+                                                barCode: e.target.value,
+                                            });
+                                        }}
                                     />
                                 </div>
                                 <div>
@@ -112,6 +183,13 @@ export default function ProductAdd() {
                                         id="product-description"
                                         rows="4"
                                         name="productDescription"
+                                        value={formData.description}
+                                        onChange={(e) => {
+                                            setFormData({
+                                                ...formData,
+                                                description: e.target.value,
+                                            });
+                                        }}
                                     ></textarea>
                                 </div>
                             </div>
@@ -128,26 +206,20 @@ export default function ProductAdd() {
                             </a>
                         </div>
                         <div className="card-body">
-                            <form
-                                action=""
-                                id="dropzone-basic"
-                                className="dropzone needsclick dz-clickable"
-                            >
-                                <div className="dz-message needsclick my-5">
-                                    <p className="fs-4 note needsclick my-2 text-center">
-                                        Drag and drop your image here
-                                    </p>
-                                    <small className="text-muted d-block fs-6 my-2 text-center">
-                                        or
-                                    </small>
-                                    <span
-                                        id="btnBrowse"
-                                        className="note needsclick btn bg-label-primary"
-                                    >
-                                        Browse image
-                                    </span>
+                            <div className="mb-3">
+                                <label htmlFor="productImage" className="form-label">
+                                    Small file input example
+                                </label>
+                                <input
+                                    className="form-control form-control-sm"
+                                    id="productImage"
+                                    type="file"
+                                    onChange={(e)=>{imageUploaded(e)}}
+                                />
+                                <div className="product-image-container mt-4">
+                                    <img src="https://s.yimg.com/ny/api/res/1.2/9.SMVcYd6StC6K8UChD9Cw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTI0MDA7aD0xNTM4O2NmPXdlYnA-/https://media.zenfs.com/en/business_insider_articles_888/3008d44b94896fcae1a1a55fbdd7da07" alt="" className="product-image-show" />
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                     <div className="card mb-4 border-0 shadow-lg">
@@ -265,10 +337,67 @@ export default function ProductAdd() {
                                 </label>
                                 <div className="border-top pt-3 ">
                                     <div className="custom-control custom-switch d-flex align-items-center justify-content-between">
-                                       <span className="mb-0 h6">In stock</span>
-                                       <div className="custom-toggle-switch" id="custom-toggle-switch"></div>
+                                        <span className="mb-0 h6">
+                                            In stock
+                                        </span>
+                                        <div
+                                            className="custom-toggle-switch"
+                                            id="custom-toggle-switch"
+                                            style={
+                                                buttonToggle
+                                                    ? buttonOn.butttonSwitch
+                                                    : buttonOff.butttonSwitch
+                                            }
+                                        >
+                                            <div
+                                                onClick={setButtonToggleFunc}
+                                                id="custom-toggle-switch-button"
+                                                style={
+                                                    buttonToggle
+                                                        ? buttonOn.butttonToggle
+                                                        : buttonOff.buttonToggle
+                                                }
+                                            ></div>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card mb-4 border-0 shadow-lg">
+                        <div className="card-header border-0">
+                            <h5 className="card-title">Organize</h5>
+                        </div>
+                        <div className="card-body">
+                            <div className="form-group">
+                                <label
+                                    htmlFor="product-category"
+                                    className="form-label"
+                                >
+                                    Category
+                                </label>
+                                <select
+                                    className="form-control"
+                                    id="product-category"
+                                >
+                                    <option>electronix</option>
+                                    <option>men</option>
+                                    <option>women</option>
+                                </select>
+                                <label
+                                    htmlFor="product-status"
+                                    className="form-label"
+                                >
+                                    Status
+                                </label>
+                                <select
+                                    className="form-control"
+                                    id="product-status"
+                                >
+                                    <option>Published</option>
+                                    <option>scheduled</option>
+                                    <option>inactive</option>
+                                </select>
                             </div>
                         </div>
                     </div>

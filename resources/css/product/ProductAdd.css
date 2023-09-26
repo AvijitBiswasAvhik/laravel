@@ -1,26 +1,58 @@
 @font-face {
-    font-family: 'Arapey';
-    src: url('../../font/Arapey/Arapey-Regular.ttf');
+    font-family: "Arapey";
+    src: url("../../font/Arapey/Arapey-Regular.ttf");
 }
-#product-add{
-    background-color: #F5F5F9;
+#product-add {
+    background-color: #f5f5f9;
 }
-.product-add{
-   
-}
-.add-product-title-box h4{
-    font-family: 'Arapey';
+
+.add-product-title-box h4 {
+    font-family: "Arapey";
     font-weight: lighter;
 }
-#btnBrowse{
-    background-color: #E7E7FF;
-    margin:  0 auto;
-    color: #7577FF;
+#btnBrowse {
+    background-color: #e7e7ff;
+    margin: 0 auto;
+    color: #7577ff;
 }
 /* design custom toggle switch */
-#custom-toggle-switch{
+@keyframes slide-in {
+    0% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+#custom-toggle-switch {
     height: 20px;
-    border:1px solid black;
     width: 40px;
     border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding:2px;
+    box-shadow: 0 0 4px black;
+    cursor: pointer;
+
+}
+
+#custom-toggle-switch-button {
+    position: relative;
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    right: 0;
+}
+.product-image-container{
+    overflow: hidden;
+    height: 400px;
+}
+.product-image-show{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
