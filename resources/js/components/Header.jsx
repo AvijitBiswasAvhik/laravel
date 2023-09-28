@@ -15,7 +15,6 @@ export default function Header({showSidebar, setShowSidebar}) {
     }, []);
     function showHide(e) {
         let sidebar = document.querySelector(".sidebar");
-        console.log("h");
         if (showSidebar.display == "none") {
             setShowSidebar({ display: "block" });
         } else if (showSidebar.display == "block") {

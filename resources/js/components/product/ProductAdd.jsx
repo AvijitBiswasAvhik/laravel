@@ -62,9 +62,20 @@ export default function ProductAdd() {
             price: { ...formData.price, stock: buttonToggle },
         });
     }, [buttonToggle]);
-    console.log(formData);
+
     ////END FORM HANDLE ///
     ///////////////////////
+     //// send data to server ///
+     const postData = ()=>{
+        axios.get('http://127.0.0.1:8000/api/hello')
+        .then((response)=>{
+            console.log(response.data);
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+     };
+     ///////////////////////
 
     return (
         <div id="product-add" className="container">
@@ -101,6 +112,7 @@ export default function ProductAdd() {
                                         role="button"
                                         aria-pressed="true"
                                         className="btn btn-outline-success"
+                                        onClick={postData}
                                     >
                                         Publish Product
                                     </button>

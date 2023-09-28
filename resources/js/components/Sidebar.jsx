@@ -19,15 +19,12 @@ import {
 
 export default function Sidebar(components) {
     function activeLink(e) {
-        console.log(e.currentTarget);
         let currentElement = e.currentTarget;
         let allChild = currentElement.childNodes;
         allChild.forEach((element) => {
             element.classList.remove("actives");
             if (e.target.parentNode.id == element.id) {
-                console.log(e.target.parentNode.id);
                 element.classList.add("actives");
-                console.log(element.dataset.id);
                 if (element.dataset.id) {
                     let key = element.dataset.id;
                     switch (key) {
