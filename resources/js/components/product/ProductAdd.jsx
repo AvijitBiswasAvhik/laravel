@@ -4,17 +4,19 @@ import "../../../css/product/ProductAdd.css";
 
 export default function ProductAdd() {
     let [buttonToggle, setButtonToggle] = useState(true);
+    let [details, setDetails] = useState();
+    let [price, setPrice] = useState();
     let [formData, setFormData] = useState({
         name: "",
         sku: "",
         barCode: "",
         description: "",
-        image: { imageTitle: "", imageFile: "" },
+        image: { imageTitle: "", imageFile: null },
         details: {
             weight: "",
-            size: { width: "", height: "" },
-            category: "",
-            status: "",
+            size: "",
+            color: "",
+            smell: "",
         },
         price: {
             basePrice: "",
@@ -22,6 +24,8 @@ export default function ProductAdd() {
             tax: false,
             stock: true,
         },
+        category: "",
+        status: "",
     });
     let buttonOn = {
         butttonToggle: { translate: "100%", transition: ".5s" },
@@ -37,18 +41,28 @@ export default function ProductAdd() {
     ///// FORM HANDLE //////
     ////////////////////////
     let imageUploaded = (e) => {
-        let imageShow = document.querySelector('.product-image-show');
+        let imageShow = document.querySelector(".product-image-show");
         const file = e.target.files[0];
         console.log(file);
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                imageShow.src = e.target.result; // Corrected typo here
+                setFormData({
+                    ...formData,
+                    image: { ...formData.image, imageFile: e.target.result },
+                }); // Corrected typo here
             };
             reader.readAsDataURL(file);
         }
     };
-    
+    /// handle stock or not
+    useEffect(() => {
+        setFormData({
+            ...formData,
+            price: { ...formData.price, stock: buttonToggle },
+        });
+    }, [buttonToggle]);
+    console.log(formData);
     ////END FORM HANDLE ///
     ///////////////////////
 
@@ -207,17 +221,28 @@ export default function ProductAdd() {
                         </div>
                         <div className="card-body">
                             <div className="mb-3">
-                                <label htmlFor="productImage" className="form-label">
+                                <label
+                                    htmlFor="productImage"
+                                    className="form-label"
+                                >
                                     Small file input example
                                 </label>
                                 <input
                                     className="form-control form-control-sm"
                                     id="productImage"
                                     type="file"
-                                    onChange={(e)=>{imageUploaded(e)}}
+                                    onChange={(e) => {
+                                        imageUploaded(e);
+                                    }}
                                 />
                                 <div className="product-image-container mt-4">
-                                    <img src="https://s.yimg.com/ny/api/res/1.2/9.SMVcYd6StC6K8UChD9Cw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTI0MDA7aD0xNTM4O2NmPXdlYnA-/https://media.zenfs.com/en/business_insider_articles_888/3008d44b94896fcae1a1a55fbdd7da07" alt="" className="product-image-show" />
+                                    {formData.image.imageFile && (
+                                        <img
+                                            src={formData.image.imageFile}
+                                            alt=""
+                                            className="product-image-show"
+                                        />
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -228,7 +253,7 @@ export default function ProductAdd() {
                         </div>
                         <div className="card-body">
                             <form>
-                                <div className="form-row d-flex">
+                                <div className="form-row d-flex mb-4">
                                     <div className="col-6">
                                         <label
                                             htmlFor="product-variants"
@@ -241,6 +266,12 @@ export default function ProductAdd() {
                                             id="product-variants"
                                             className="form-select w-50"
                                             aria-label="Default select example"
+                                            onChange={(e) => {
+                                                console.log(e.target.value);
+                                                let key = e.target.value;
+                                                setDetails({ [key]: "" });
+                                                //setFormData({...formData,details:{...formData.details, [key]: "" }});
+                                            }}
                                         >
                                             <option value="size">Size</option>
                                             <option value="weight">
@@ -250,26 +281,43 @@ export default function ProductAdd() {
                                             <option value="smell">Smell</option>
                                         </select>
                                     </div>
-                                    <div className="col-6 mb-3">
-                                        <label
-                                            htmlFor="product-variants-type"
-                                            className="form-label"
-                                        >
-                                            Enter Your product Size
-                                        </label>
-                                        <select
-                                            name="productVariants2" // Unique name for the second select
-                                            id="product-variants-type"
-                                            className="form-select w-50"
-                                            aria-label="Default select example"
-                                        >
-                                            <option value="size">Size</option>
-                                            <option value="weight">
-                                                Weight
-                                            </option>
-                                            <option value="color">Color</option>
-                                            <option value="smell">Smell</option>
-                                        </select>
+                                    <div className="col-6">
+                                        {details && (
+                                            <>
+                                                <label
+                                                    htmlFor="product-variants-type"
+                                                    className="form-label"
+                                                >
+                                                    Enter Your product{" "}
+                                                    {Object.keys(details)}
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    name={Object.keys(details)}
+                                                    placeholder={Object.keys(
+                                                        details
+                                                    )}
+                                                    value={
+                                                        formData.details[
+                                                            Object.keys(details)
+                                                        ]
+                                                    }
+                                                    onChange={(e) => {
+                                                        let key = e.target.name;
+                                                        console.log(key);
+                                                        setFormData({
+                                                            ...formData,
+                                                            details: {
+                                                                ...formData.details,
+                                                                [key]: e.target
+                                                                    .value,
+                                                            },
+                                                        });
+                                                    }}
+                                                />
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="form-row">
@@ -311,6 +359,17 @@ export default function ProductAdd() {
                                     className="form-control"
                                     id="product-price"
                                     placeholder="Price"
+                                    name="basePrice"
+                                    value={formData.price.basePrice}
+                                    onChange={(e) => {
+                                        setFormData({
+                                            ...formData,
+                                            price: {
+                                                ...formData.price,
+                                                basePrice: e.target.value,
+                                            },
+                                        });
+                                    }}
                                 />
                                 <label
                                     htmlFor="product-discount-price"
@@ -323,11 +382,33 @@ export default function ProductAdd() {
                                     className="form-control"
                                     id="product-discount-price"
                                     placeholder="Discounted Price"
+                                    name="discountPrice"
+                                    value={formData.price.discountPrice}
+                                    onChange={(e) => {
+                                        setFormData({
+                                            ...formData,
+                                            price: {
+                                                ...formData.price,
+                                                discountPrice: e.target.value,
+                                            },
+                                        });
+                                    }}
                                 />
                                 <input
                                     type="checkbox"
                                     className="form-check-input border border-2 border-secondary"
                                     id="price-charge-tax"
+                                    name="tax"
+                                    value={formData.price.tax}
+                                    onChange={(e) => {
+                                        setFormData({
+                                            ...formData,
+                                            price: {
+                                                ...formData.price,
+                                                tax: !formData.price.tax,
+                                            },
+                                        });
+                                    }}
                                 />
                                 <label
                                     htmlFor="price-charge-tax"
@@ -379,6 +460,13 @@ export default function ProductAdd() {
                                 <select
                                     className="form-control"
                                     id="product-category"
+                                    value={formData.category}
+                                    onChange={(e) => {
+                                        setFormData({
+                                            ...formData,
+                                            category: e.target.value,
+                                        });
+                                    }}
                                 >
                                     <option>electronix</option>
                                     <option>men</option>
@@ -393,6 +481,13 @@ export default function ProductAdd() {
                                 <select
                                     className="form-control"
                                     id="product-status"
+                                    value={formData.status}
+                                    onChange={(e) => {
+                                        setFormData({
+                                            ...formData,
+                                            status: e.target.value,
+                                        });
+                                    }}
                                 >
                                     <option>Published</option>
                                     <option>scheduled</option>
