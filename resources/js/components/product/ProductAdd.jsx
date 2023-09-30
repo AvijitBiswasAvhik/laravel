@@ -9,9 +9,9 @@ export default function ProductAdd() {
     let [formData, setFormData] = useState({
         name: "",
         sku: "",
-        barCode: "",
+        barcode: "",
         description: "",
-        image: { imageTitle: "", imageFile: null },
+        image: '',
         details: {
             weight: "",
             size: "",
@@ -49,7 +49,7 @@ export default function ProductAdd() {
             reader.onload = (e) => {
                 setFormData({
                     ...formData,
-                    image: { ...formData.image, imageFile: e.target.result },
+                    image:  e.target.result ,
                 }); // Corrected typo here
             };
             reader.readAsDataURL(file);
@@ -67,7 +67,8 @@ export default function ProductAdd() {
     ///////////////////////
      //// send data to server ///
      const postData = ()=>{
-        axios.get('http://127.0.0.1:8000/api/hello')
+        console.log(formData)
+        axios.post('http://127.0.0.1:8000/api/product/create', formData)
         .then((response)=>{
             console.log(response.data);
         })
@@ -191,11 +192,11 @@ export default function ProductAdd() {
                                         className="form-control"
                                         placeholder="0123-456"
                                         aria-label="Product Barcode"
-                                        value={formData.barCode}
+                                        value={formData.barcode}
                                         onChange={(e) => {
                                             setFormData({
                                                 ...formData,
-                                                barCode: e.target.value,
+                                                barcode: e.target.value,
                                             });
                                         }}
                                     />
@@ -248,9 +249,9 @@ export default function ProductAdd() {
                                     }}
                                 />
                                 <div className="product-image-container mt-4">
-                                    {formData.image.imageFile && (
+                                    {formData.image && (
                                         <img
-                                            src={formData.image.imageFile}
+                                            src={formData.image}
                                             alt=""
                                             className="product-image-show"
                                         />
