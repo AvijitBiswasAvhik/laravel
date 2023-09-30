@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+
 
 class ProductController extends Controller
 {
@@ -23,12 +27,11 @@ class ProductController extends Controller
     {
 
         $data = $request->validated();
-        if(isset($data['image'])){
-            return 'true';
-        }
+        $data['image'] = $this->saveImage($data['image']);
+        return response($data['image']);
         die;
-       // Product::create($data);
-       // return response($data);
+        Product::create($data);
+        return response($data);
     }
 
     /**
@@ -69,5 +72,28 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+    public function saveImage($image)
+    {
+
+        if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
+            $type = $type[1];
+            $image = substr($image, strpos($image, ',') + 1);
+            $image = str_replace(' ', '+', $image);
+            $image = base64_decode($image);
+            if ($image === false) {
+                throw new \Exception('Invalid image');
+            }
+        }
+        $dir = 'product/images/';
+        $file = Str::random(12) . '.' . $type;
+        $absolutePath = public_path($dir);
+        $relativePath = $dir . $file;
+        if (!File::exists($absolutePath)) {
+            File::makeDirectory($absolutePath, 0755, true);
+        }
+        file_put_contents($relativePath, $image);
+        return $relativePath;
+
     }
 }

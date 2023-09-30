@@ -67,7 +67,7 @@ export default function ProductAdd() {
     ///////////////////////
      //// send data to server ///
      const postData = ()=>{
-        console.log(formData)
+        // console.log(formData)
         axios.post('http://127.0.0.1:8000/api/product/create', formData)
         .then((response)=>{
             console.log(response.data);
@@ -251,7 +251,7 @@ export default function ProductAdd() {
                                 <div className="product-image-container mt-4">
                                     {formData.image && (
                                         <img
-                                            src={formData.image}
+                                            src={'product/images/BD7jQmFjXXO8.jpeg'}
                                             alt=""
                                             className="product-image-show"
                                         />

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\Base64Image;
 
 class StoreProductRequest extends FormRequest
 {
@@ -28,7 +29,7 @@ class StoreProductRequest extends FormRequest
             'description' => 'required|string|max:1000',
             'category' => 'required|string|max:50',
             'status' => 'required|string|max:60',
-            'image' => 'required|string',
+            'image' => ['string', new Base64Image()],
         ];
     }
 }
