@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Rules\Price;
 
 class Product extends Model
 {
@@ -17,4 +18,7 @@ class Product extends Model
         'status',
         'image',
     ];
+    public function price(){
+        return $this->hasOne(Price::class);
+    }
 }

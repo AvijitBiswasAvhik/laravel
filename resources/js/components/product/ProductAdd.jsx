@@ -11,22 +11,18 @@ export default function ProductAdd() {
         sku: "",
         barcode: "",
         description: "",
-        image: '',
+        image: "",
         details: {
             weight: "",
             size: "",
             color: "",
             smell: "",
         },
-        price: {
-            basePrice: "",
-            discountPrice: "",
-            tax: false,
-            stock: true,
-        },
+        price: { price: 0, discount_price: 0, tax: false, stock: true },
         category: "",
         status: "",
     });
+    let [handleError, setHandleError] = useState({});
     let buttonOn = {
         butttonToggle: { translate: "100%", transition: ".5s" },
         butttonSwitch: { backgroundColor: "#450BA5", transition: ".5s" },
@@ -49,7 +45,7 @@ export default function ProductAdd() {
             reader.onload = (e) => {
                 setFormData({
                     ...formData,
-                    image:  e.target.result ,
+                    image: e.target.result,
                 }); // Corrected typo here
             };
             reader.readAsDataURL(file);
@@ -62,22 +58,34 @@ export default function ProductAdd() {
             price: { ...formData.price, stock: buttonToggle },
         });
     }, [buttonToggle]);
-
+    
     ////END FORM HANDLE ///
     ///////////////////////
-     //// send data to server ///
-     const postData = ()=>{
-        // console.log(formData)
-        axios.post('http://127.0.0.1:8000/api/product/create', formData)
-        .then((response)=>{
-            console.log(response.data);
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
-     };
-     ///////////////////////
-
+    //// send data to server ///
+    const postData = () => {
+         console.log(formData)
+        axios
+            .post("http://127.0.0.1:8000/api/product/create", formData)
+            .then((response) => {
+                console.log(JSON.parse(response.data));
+            })
+            .catch((error) => {
+                // handle error
+                let errors = error.response.data.errors;
+                console.log(errors);
+                let errorObj = {};
+                for (let key in errors) {
+                    errorObj[key] = errors[key][0];
+                }
+                let data = errorObj.price ? JSON.parse(errorObj.price): '';
+                errorObj = {...errorObj, price: {...data}}
+                setHandleError(errorObj);
+               
+            });
+    };
+    console.log(handleError)
+    ///////////////////////
+    //console.log(handleError);
     return (
         <div id="product-add" className="container">
             <div className="row">
@@ -153,6 +161,14 @@ export default function ProductAdd() {
                                             });
                                         }}
                                     />
+                                    {handleError.name && (
+                                        <small
+                                            id="emailHelp"
+                                            className="form-text text-danger"
+                                        >
+                                            {handleError.name}
+                                        </small>
+                                    )}
                                 </div>
                             </div>
                             <div className="row mb-3">
@@ -178,6 +194,14 @@ export default function ProductAdd() {
                                             });
                                         }}
                                     />
+                                    {handleError.sku && (
+                                        <small
+                                            id="emailHelp"
+                                            className="form-text text-danger"
+                                        >
+                                            {handleError.sku}
+                                        </small>
+                                    )}
                                 </div>
                                 <div className="col">
                                     <label
@@ -200,6 +224,14 @@ export default function ProductAdd() {
                                             });
                                         }}
                                     />
+                                    {handleError.barcode && (
+                                        <small
+                                            id="emailHelp"
+                                            className="form-text text-danger"
+                                        >
+                                            {handleError.barcode}
+                                        </small>
+                                    )}
                                 </div>
                                 <div>
                                     <label htmlFor="product-description">
@@ -218,6 +250,14 @@ export default function ProductAdd() {
                                             });
                                         }}
                                     ></textarea>
+                                    {handleError.description && (
+                                        <small
+                                            id="emailHelp"
+                                            className="form-text text-danger"
+                                        >
+                                            {handleError.description}
+                                        </small>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -248,10 +288,20 @@ export default function ProductAdd() {
                                         imageUploaded(e);
                                     }}
                                 />
+                                {handleError.image && (
+                                    <small
+                                        id="emailHelp"
+                                        className="form-text text-danger"
+                                    >
+                                        {handleError.image}
+                                    </small>
+                                )}
                                 <div className="product-image-container mt-4">
                                     {formData.image && (
                                         <img
-                                            src={'product/images/BD7jQmFjXXO8.jpeg'}
+                                            src={
+                                                "product/images/BD7jQmFjXXO8.jpeg"
+                                            }
                                             alt=""
                                             className="product-image-show"
                                         />
@@ -293,6 +343,14 @@ export default function ProductAdd() {
                                             <option value="color">Color</option>
                                             <option value="smell">Smell</option>
                                         </select>
+                                        {handleError.size && (
+                                            <small
+                                                id="emailHelp"
+                                                className="form-text text-danger"
+                                            >
+                                                {handleError.size}
+                                            </small>
+                                        )}
                                     </div>
                                     <div className="col-6">
                                         {details && (
@@ -373,17 +431,28 @@ export default function ProductAdd() {
                                     id="product-price"
                                     placeholder="Price"
                                     name="basePrice"
-                                    value={formData.price.basePrice}
+                                    value={formData.price.price}
                                     onChange={(e) => {
                                         setFormData({
                                             ...formData,
                                             price: {
                                                 ...formData.price,
-                                                basePrice: e.target.value,
+                                                price: e.target.value,
                                             },
                                         });
                                     }}
                                 />
+                                {handleError.price.price && (
+                                    <>
+                                        <small
+                                            id="emailHelp"
+                                            className="form-text text-danger"
+                                        >
+                                            {handleError.price.price}
+                                        </small>
+                                        <br />
+                                    </>
+                                )}
                                 <label
                                     htmlFor="product-discount-price"
                                     className="form-label"
@@ -395,18 +464,29 @@ export default function ProductAdd() {
                                     className="form-control"
                                     id="product-discount-price"
                                     placeholder="Discounted Price"
-                                    name="discountPrice"
-                                    value={formData.price.discountPrice}
+                                    name="discount_price"
+                                    value={formData.price.discount_price}
                                     onChange={(e) => {
                                         setFormData({
                                             ...formData,
                                             price: {
                                                 ...formData.price,
-                                                discountPrice: e.target.value,
+                                                discount_price: e.target.value,
                                             },
                                         });
                                     }}
                                 />
+                                {handleError.price.discount_price && (
+                                    <>
+                                        <small
+                                            id="emailHelp"
+                                            className="form-text text-danger"
+                                        >
+                                            {handleError.price.discount_price}
+                                        </small>
+                                        <br />
+                                    </>
+                                )}
                                 <input
                                     type="checkbox"
                                     className="form-check-input border border-2 border-secondary"
@@ -485,6 +565,18 @@ export default function ProductAdd() {
                                     <option>men</option>
                                     <option>women</option>
                                 </select>
+                                {handleError.category && (
+                                    <>
+                                        <small
+                                            id="emailHelp"
+                                            className="form-text text-danger"
+                                        >
+                                            {handleError.category}
+                                        </small>
+                                        <br />
+                                    </>
+                                )}
+
                                 <label
                                     htmlFor="product-status"
                                     className="form-label"
@@ -506,6 +598,14 @@ export default function ProductAdd() {
                                     <option>scheduled</option>
                                     <option>inactive</option>
                                 </select>
+                                {handleError.stock && (
+                                    <small
+                                        id="emailHelp"
+                                        className="form-text text-danger"
+                                    >
+                                        {handleError.status}
+                                    </small>
+                                )}
                             </div>
                         </div>
                     </div>

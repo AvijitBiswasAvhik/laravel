@@ -8,6 +8,9 @@ use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use App\Http\Requests\StorePriceRequest;
+use App\Http\Requests\UpdatePriceRequest;
+use Illuminate\Support\Facades\Request;
 
 
 class ProductController extends Controller
@@ -28,10 +31,10 @@ class ProductController extends Controller
 
         $data = $request->validated();
         $data['image'] = $this->saveImage($data['image']);
-        return response($data['image']);
+        return 'hello';
         die;
-        Product::create($data);
-        return response($data);
+        //Product::create($data);
+        //return response($data);
     }
 
     /**
@@ -94,6 +97,5 @@ class ProductController extends Controller
         }
         file_put_contents($relativePath, $image);
         return $relativePath;
-
     }
 }
