@@ -37,19 +37,26 @@ export default function Sidebar(components) {
                         case "ProductList":
                             components.setCurrentComponent(<ProductList />);
                             break;
-                        default:
+                        default: 
                             break;
                     }
                 }
             }
         });
     }
+    function SetDashboard(){
+        components.setCurrentComponent(<SubDashboard />);
+        console.log('fg')
+    }
     return (
         <div id="sidebar-dashboard">
             <ul className="sidebar-list-menu">
-                <li className="sidebar-menu collapsed">
+                <li
+                    className="sidebar-menu collapsed"
+                    onClick={SetDashboard}
+                >
                     <div className="d-flex align-items-center justify-content-between">
-                        <a href="" className="m-link">
+                        <a href="#" className="m-link">
                             <FontAwesomeIcon icon={faHouse} />{" "}
                             <span> Dashboard</span>
                         </a>

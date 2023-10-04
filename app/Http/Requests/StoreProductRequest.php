@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\Base64Image;
 use App\Rules\Price;
+use App\Rules\Tax;
 
 class StoreProductRequest extends FormRequest
 {

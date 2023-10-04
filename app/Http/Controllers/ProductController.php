@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\File;
 use App\Http\Requests\StorePriceRequest;
 use App\Http\Requests\UpdatePriceRequest;
 use Illuminate\Support\Facades\Request;
+use App\Models\Price;
+use App\Http\Resources\Products;
 
 
 class ProductController extends Controller
@@ -20,7 +22,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $data = Product::all();
+        return Products::collection($data);
     }
 
     /**
@@ -31,10 +34,25 @@ class ProductController extends Controller
 
         $data = $request->validated();
         $data['image'] = $this->saveImage($data['image']);
-        return 'hello';
-        die;
-        //Product::create($data);
-        //return response($data);
+        if (File::exists($data['image'])) {
+            $product = Product::create($data);
+            if ($product) {
+                $priceData = $data['price'];
+                $priceData['product_id'] = $product->id;
+                $nPrice = Price::create($priceData);
+                if (!$nPrice) {
+                    $nProduct = Product::find($product->id);
+                    if ($nProduct->delete()) {
+                        File::delete($data['image']);
+                    }
+                }
+            } else {
+                File::delete($data['image']);
+                throw new \Exception('Something went wrong');
+            }
+        } else {
+            throw new \Exception('invalid image type');
+        }
     }
 
     /**

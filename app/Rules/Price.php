@@ -39,9 +39,14 @@ class Price implements ValidationRule
                 $arr['discount_price'] = 'Discount price is higher than price';
             }
         }
-        if(!empty($arr)){
+        if (!is_bool($value['tax'])) {
+            $arr['tax'] = 'Tax bust be boolean';
+        }
+        if(!is_bool($value['stock'])){
+            $arr['stock'] = 'Stock must be boolean';
+        }
+        if (!empty($arr)) {
             $fail(json_encode($arr));
         }
-        
     }
 }

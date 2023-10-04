@@ -11,8 +11,12 @@ class Price extends Model
     protected $fillable = [
         'price',
         'discount_price',
+        'product_id',
+        'tax',
+        'stock',
     ];
-    public function product(){
+    public function product()
+    {
         return $this->belongsTo(Product::class);
     }
 }

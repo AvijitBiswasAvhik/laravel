@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import {useNavigate, Navigate} from 'react-router-dom';
 import axios from "axios";
 import "../../../css/product/ProductAdd.css";
 
@@ -23,6 +24,7 @@ export default function ProductAdd() {
         status: "",
     });
     let [handleError, setHandleError] = useState({});
+    let navigate = useNavigate();
     let buttonOn = {
         butttonToggle: { translate: "100%", transition: ".5s" },
         butttonSwitch: { backgroundColor: "#450BA5", transition: ".5s" },
@@ -58,32 +60,39 @@ export default function ProductAdd() {
             price: { ...formData.price, stock: buttonToggle },
         });
     }, [buttonToggle]);
-    
+
     ////END FORM HANDLE ///
     ///////////////////////
     //// send data to server ///
     const postData = () => {
-         console.log(formData)
         axios
             .post("http://127.0.0.1:8000/api/product/create", formData)
             .then((response) => {
-                console.log(JSON.parse(response.data));
+                // Handle a successful response here if needed
+                setHandleError({});
+                navigate('/home');
             })
             .catch((error) => {
-                // handle error
-                let errors = error.response.data.errors;
-                console.log(errors);
-                let errorObj = {};
-                for (let key in errors) {
-                    errorObj[key] = errors[key][0];
-                }
-                let data = errorObj.price ? JSON.parse(errorObj.price): '';
+                // Handle errors here
+                
+                    let errors = error.response.data.errors;
+
+                    // Log the errors to the console for debugging
+
+                    // Create an error object to store the error messages
+                    let errorObj = {};
+
+                    // Loop through the errors and store them in the error object
+                    for (let key in errors) {
+                        errorObj[key] = errors[key][0];
+                    }
+                    let data = errorObj.price ? JSON.parse(errorObj.price): '';
                 errorObj = {...errorObj, price: {...data}}
-                setHandleError(errorObj);
-               
+                    // Update your state with the error object
+                    setHandleError(errorObj);
             });
     };
-    console.log(handleError)
+    console.log(handleError);
     ///////////////////////
     //console.log(handleError);
     return (
@@ -300,7 +309,7 @@ export default function ProductAdd() {
                                     {formData.image && (
                                         <img
                                             src={
-                                                "product/images/BD7jQmFjXXO8.jpeg"
+                                                formData.image
                                             }
                                             alt=""
                                             className="product-image-show"
@@ -442,7 +451,7 @@ export default function ProductAdd() {
                                         });
                                     }}
                                 />
-                                {handleError.price.price && (
+                                {handleError.price && (
                                     <>
                                         <small
                                             id="emailHelp"
@@ -476,7 +485,7 @@ export default function ProductAdd() {
                                         });
                                     }}
                                 />
-                                {handleError.price.discount_price && (
+                                {handleError.price && (
                                     <>
                                         <small
                                             id="emailHelp"
@@ -598,13 +607,16 @@ export default function ProductAdd() {
                                     <option>scheduled</option>
                                     <option>inactive</option>
                                 </select>
-                                {handleError.stock && (
-                                    <small
-                                        id="emailHelp"
-                                        className="form-text text-danger"
-                                    >
-                                        {handleError.status}
-                                    </small>
+                                {handleError.status && (
+                                    <>
+                                        <small
+                                            id="emailHelp"
+                                            className="form-text text-danger"
+                                        >
+                                            {handleError.status}
+                                        </small>
+                                        <br />
+                                    </>
                                 )}
                             </div>
                         </div>
