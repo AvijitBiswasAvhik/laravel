@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "../../css/Dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Sidebar from "./Sidebar";
 import SubDashboard from "./SubDashboard";
 import Header from "./Header";
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SingleProduct from "../components/product/SingleProduct";
+import ProductAdd from "./product/ProductAdd";
+import ProductList from "./product/ProductList";
 
 import {
     faSearch,
@@ -48,7 +50,7 @@ export default function Dashboard() {
     // sahow and hide side bar
 
     return (
-        <Router>
+        <BrowserRouter>
             <div id="dashboard-container" className="container">
                 <div className="row justify-content-center">
                     <div className="col-lg-3 sidebar" style={showSidebar}>
@@ -65,11 +67,34 @@ export default function Dashboard() {
                                     setShowSidebar={setShowSidebar}
                                 />
                             </div>
-                            {currentComponent == null ? <SubDashboard /> : currentComponent}
+                            {/* {currentComponent == null ? (
+                                <SubDashboard />
+                            ) : (
+                                currentComponent
+                            )} */}
+                            <Routes>
+                                <Route
+                                    path="/home"
+                                    element={<SubDashboard />}
+                                />
+                                <Route
+                                    path="/product-list"
+                                    element={<ProductList />}
+                                ></Route>
+
+                                <Route
+                                    path="/single-product/:id"
+                                    element={<SingleProduct />}
+                                />
+                                <Route
+                                    path="/product-add"
+                                    element={<ProductAdd />}
+                                />
+                            </Routes>
                         </div>
                     </div>
                 </div>
             </div>
-        </Router>
+        </BrowserRouter>
     );
 }

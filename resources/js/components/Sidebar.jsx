@@ -3,8 +3,8 @@ import "../../css/Sidebar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MyReactComponent from "./MyReactComponent";
 import SubDashboard from "./SubDashboard";
-import ProductAdd from "./product/ProductAdd";
-import ProductList from "./product/ProductList";
+
+import { Link } from "react-router-dom";
 import {
     faHouse,
     faTruckFast,
@@ -23,43 +23,40 @@ export default function Sidebar(components) {
         let allChild = currentElement.childNodes;
         allChild.forEach((element) => {
             element.classList.remove("actives");
-            if (e.target.parentNode.id == element.id) {
-                element.classList.add("actives");
-                if (element.dataset.id) {
-                    let key = element.dataset.id;
-                    switch (key) {
-                        case "ProductAdd":
-                            components.setCurrentComponent(<ProductAdd />);
-                            break;
-                        case "ProductCategory":
-                            components.setCurrentComponent(<SubDashboard />);
-                            break;
-                        case "ProductList":
-                            components.setCurrentComponent(<ProductList />);
-                            break;
-                        default: 
-                            break;
-                    }
-                }
-            }
+            // if (e.target.parentNode.id == element.id) {
+            //     element.classList.add("actives");
+            //     if (element.dataset.id) {
+            //         let key = element.dataset.id;
+            //         switch (key) {
+            //             case "ProductAdd":
+            //                 components.setCurrentComponent(<ProductAdd />);
+            //                 break;
+            //             case "ProductCategory":
+            //                 components.setCurrentComponent(<SubDashboard />);
+            //                 break;
+            //             case "ProductList":
+            //                 components.setCurrentComponent(<ProductList />);
+            //                 break;
+            //             default:
+            //                 break;
+            //         }
+            //     }
+            // }
         });
     }
-    function SetDashboard(){
+    function SetDashboard() {
         components.setCurrentComponent(<SubDashboard />);
-        console.log('fg')
+        console.log("fg");
     }
     return (
         <div id="sidebar-dashboard">
             <ul className="sidebar-list-menu">
-                <li
-                    className="sidebar-menu collapsed"
-                    onClick={SetDashboard}
-                >
+                <li className="sidebar-menu collapsed" onClick={SetDashboard}>
                     <div className="d-flex align-items-center justify-content-between">
-                        <a href="#" className="m-link">
+                        <Link to="/home" className="m-link">
                             <FontAwesomeIcon icon={faHouse} />{" "}
                             <span> Dashboard</span>
-                        </a>
+                        </Link>
                         <FontAwesomeIcon
                             icon={faChevronRight}
                             className="faRight"
@@ -87,9 +84,12 @@ export default function Sidebar(components) {
                                 id="1"
                                 data-id="ProductList"
                             >
-                                <a href="#" className="nav-link">
+                                <Link
+                                    to="/product-list"
+                                    className="nav-link"
+                                >
                                     product list
-                                </a>
+                                </Link>
                             </li>
                             <li
                                 className="nab-item"
@@ -105,9 +105,9 @@ export default function Sidebar(components) {
                                 id="3"
                                 data-id="ProductAdd"
                             >
-                                <a href="#" className="nav-link">
+                                <Link to="product-add" className="nav-link">
                                     product add
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>

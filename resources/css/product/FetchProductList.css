@@ -1,0 +1,10 @@
+.product-list-image-container{
+    overflow: hidden;
+    height: 100px;
+    width: 100px;
+}
+.product-list-image-container img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}

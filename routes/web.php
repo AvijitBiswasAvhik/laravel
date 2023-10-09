@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\SingleProduct;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,7 @@ Route::get('/name', [Controller::class, 'name']);
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/{any?}/{id}', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/product/add', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/hello', [HomeController::class, 'hello']);
+Route::get('/single/product', [SingleProduct::class, 'singleProduct']);
