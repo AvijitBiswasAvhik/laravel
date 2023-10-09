@@ -65,7 +65,7 @@ export default function Header({showSidebar, setShowSidebar}) {
                                 <p>Admin Profile</p>
                             </div>
                             <div className="profile-image-container">
-                                <img src="lion.jpg" alt="" />
+                                <img src="/lion.jpg" alt="" />
                             </div>
                         </div>
                     </li>

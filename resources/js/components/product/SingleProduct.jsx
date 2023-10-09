@@ -1,10 +1,22 @@
-import React from "react";
-import '../../../css/product/SingleProduct.css';
+import React, { useState, useEffect } from "react";
+import "../../../css/product/SingleProduct.css";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function SingleProduct() {
-    let {id} = useParams();
-    console.log(id)
+    let [data, setData] = useState();
+    let { id } = useParams();
+    useEffect(() => {
+        axios
+            .get(`/single-product-get/${id}`)
+            .then((response) => {
+                console.log(response.data);
+                setData(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
     return (
         <div className="single-product-view">
             <div className="single-view">
@@ -14,71 +26,47 @@ export default function SingleProduct() {
                     data-bs-ride="carousel"
                 >
                     <div className="carousel-indicators">
-                        <button
-                            type="button"
-                            data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide-to="0"
-                            className="active background-indicator"
-                            aria-current="true"
-                            aria-label="Slide 1"
-                          
-                            style={{backgroundImage: `url("https://cdn.mos.cms.futurecdn.net/J58xmVmyyYptScQRhHFeqP-1024-80.jpg.webp")`}}
-                        >
-                        </button>
+                        {data && (
+                            <button
+                                type="button"
+                                data-bs-target="#carouselExampleIndicators"
+                                data-bs-slide-to="0"
+                                className="active background-indicator"
+                                aria-current="true"
+                                aria-label="Slide 1"
+                                style={{
+                                    backgroundImage: `url(/${data.image})`,
+                                }}
+                            ></button>
+                        )}
+
                         <button
                             type="button"
                             data-bs-target="#carouselExampleIndicators"
                             data-bs-slide-to="1"
+                            className="background-indicator"
+                            aria-current="true"
                             aria-label="Slide 2"
-                            className="background-indicator"
-                            style={{backgroundImage: `url("https://assets.orvis.com/is/image/orvisprd/3CT309WF23F_W?wid=1024&src=is($object$:1-1)")`}}
-                        >
-                        </button>
-                        <button
-                            type="button"
-                            data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide-to="2"
-                            aria-label="Slide 3"
-                            className="background-indicator"
-                            style={{backgroundImage: `url("https://m.media-amazon.com/images/I/91XYNN3S4+L._UX569_.jpg"`}}
+                            style={{
+                                backgroundImage: `url("https://assets.orvis.com/is/image/orvisprd/3CT309WF23F_W?wid=1024&src=is($object$:1-1)")`,
+                            }}
                         ></button>
-                        <button
-                            type="button"
-                            data-bs-target="#carouselExampleIndicators"
-                            data-bs-slide-to="3"
-                            aria-label="Slide 4"
-                            className="background-indicator"
-                            style={{backgroundImage: `url("https://assets.orvis.com/is/image/orvisprd/3CT309WF23F_W?wid=1024&src=is($object$:1-1)")`}}
-                        >
-                        </button>
                     </div>
                     <div className="carousel-inner">
                         <div className="carousel-item active">
-                            <img
-                                src="https://cdn.mos.cms.futurecdn.net/J58xmVmyyYptScQRhHFeqP-1024-80.jpg.webp"
-                                className="d-block w-100"
-                                alt="Slide 1"
-                            />
+                            {data && (
+                                <img
+                                    src={`/${data.image}`}
+                                    className="d-block w-100"
+                                    alt="Slide 1"
+                                />
+                            )}
                         </div>
                         <div className="carousel-item">
                             <img
                                 src="https://assets.orvis.com/is/image/orvisprd/3CT309WF23F_W?wid=1024&src=is($object$:1-1)"
                                 className="d-block w-100"
                                 alt="Slide 2"
-                            />
-                        </div>
-                        <div className="carousel-item">
-                            <img
-                                src="https://m.media-amazon.com/images/I/91XYNN3S4+L._UX569_.jpg"
-                                className="d-block w-100"
-                                alt="Slide 3"
-                            />
-                        </div>
-                        <div className="carousel-item">
-                            <img
-                                src="https://assets.orvis.com/is/image/orvisprd/3CT309WF23F_W?wid=1024&src=is($object$:1-1)"
-                                className="d-block w-100"
-                                alt="Slide 4"
                             />
                         </div>
                     </div>
@@ -114,11 +102,11 @@ export default function SingleProduct() {
                         <div className="row">
                             <div className="col-12">
                                 <h2 className="single-product-title">
-                                    Whitney Pullover
+                                    {data && data.name}
                                 </h2>
                             </div>
                             <div className="col-12">
-                                <h5 className="single-product-price">$138</h5>
+                                <h5 className="single-product-price">${data && data.price.price}</h5>
                                 <div className="divider"></div>
                             </div>
                             <div className="col-12">
@@ -156,16 +144,11 @@ export default function SingleProduct() {
                                 <div className="single-product-description">
                                     <p>
                                         <em>
-                                            This is a demonstration store. You
-                                            can purchase products like this from
-                                            United By Blue.
+                                        {data && data.description}
                                         </em>
                                     </p>
                                     <p>
-                                        Buttons are fussy. Sometimes you just
-                                        want to roll out of bed, put on the pull
-                                        over and get to the days work. Julie is
-                                        5'8" and wearing a size small.
+                                    {data && data.description}
                                     </p>
                                     <ul className="description-list">
                                         <li>
@@ -182,4 +165,3 @@ export default function SingleProduct() {
         </div>
     );
 }
-
