@@ -13,22 +13,23 @@ class Base64Image implements ValidationRule
      * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
+
     {
         if (preg_match('/^data:image\/(\w+);base64,/', $value, $type)) {
             $image = substr($value, strpos($value, ',') + 1);
             $image = str_replace(' ', '+', $image);
 
-            
-           if (!in_array($type[1], array('jpg', 'jpeg', 'png', 'gif'))) {
+
+            if (!in_array($type[1], array('jpg', 'jpeg', 'png', 'gif'))) {
                 $fail('The image must be of type jpg, jpeg, png, or gif');
             }
             $image = base64_decode($image);
             if ($image === false) {
                 $fail('Please submit a valid image base');
             }
-        }else{
+        } elseif (preg_match('/^product\/images\/[a-zA-Z0-9]+\.(jpeg|jpg|png|gif)$/', $value)) {
+        } else {
             $fail('Please submit a valid image');
         }
-        
     }
 }

@@ -33,7 +33,7 @@ class ProductController extends Controller
     {
 
         $data = $request->validated();
-        $data['image'] = $this->saveImage($data['image']);
+        $data['image'] = $this->saveImage($data['image'], '');
         if (File::exists($data['image'])) {
             $product = Product::create($data);
             if ($product) {
@@ -82,9 +82,54 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product, Price $pr)
     {
-        //
+
+        $data = $request->validated();
+        $record = $product->find($data['id']);
+        $prr = $pr->find($data['id']);
+
+        $data['image'] = $this->saveImage($data['image'], $record['image']);
+        if (File::exists($data['image']) && $record) {
+            $product = $record->update($data);
+            if ($product) {
+                $priceData = $data['price'];
+                $priceData['product_id'] = $data['id'];
+                $nPrice = $prr->update($priceData);
+                if (!$nPrice) {
+                    $nProduct = Product::find($data['id']);
+                    if ($nProduct->delete()) {
+                        File::delete($data['image']);
+                    }
+                }
+            } else {
+                File::delete($data['image']);
+                throw new \Exception('Something went wrong');
+            }
+        } else {
+            throw new \Exception('invalid image type');
+        }
+        // $allData = $record->all();
+        // $allimg = [];
+        // foreach ($allData as $key) {
+        //     array_push($allimg, $key->image);
+        // }
+        // $dir = 'product/images/';
+        // $filesAndDirectories = scandir($dir);
+        // $files = array_filter($filesAndDirectories, function ($item) use ($dir) {
+        //     return is_file($dir . '/' . $item);
+        // });
+        
+        // foreach ($files as $key) {
+            
+        //     if(!in_array($dir.$key, $allimg)){
+               
+        //         if (File::exists($dir.$key)) {
+        //         File::delete($dir.$key);
+        //     }
+        //     }
+        // }
+        // return response(json_encode($allData));
     }
 
     /**
@@ -94,8 +139,10 @@ class ProductController extends Controller
     {
         //
     }
-    public function saveImage($image)
+    public function saveImage($image, $update)
     {
+        $dir = 'product/images/';
+        $absolutePath = public_path($dir);
 
         if (preg_match('/^data:image\/(\w+);base64,/', $image, $type)) {
             $type = $type[1];
@@ -105,15 +152,23 @@ class ProductController extends Controller
             if ($image === false) {
                 throw new \Exception('Invalid image');
             }
+
+            if ($update != null && File::exists($update)) {
+                File::delete($update);
+            }
+
+            if (!File::exists($absolutePath)) {
+                File::makeDirectory($absolutePath, 0755, true);
+            }
+            $file = Str::random(12) . '.' . $type;
+            $relativePath = $dir . $file;
+
+            file_put_contents($relativePath, $image);
+            return $relativePath;
+        } elseif (preg_match('/^product\/images\/[a-zA-Z0-9]+\.(jpeg|jpg|png|gif)$/', $image)) {
+            return $image;
+        } else {
+            return 'error';
         }
-        $dir = 'product/images/';
-        $file = Str::random(12) . '.' . $type;
-        $absolutePath = public_path($dir);
-        $relativePath = $dir . $file;
-        if (!File::exists($absolutePath)) {
-            File::makeDirectory($absolutePath, 0755, true);
-        }
-        file_put_contents($relativePath, $image);
-        return $relativePath;
     }
 }

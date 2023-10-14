@@ -90,6 +90,10 @@ export default function Dashboard() {
                                     path="/product-add"
                                     element={<ProductAdd />}
                                 />
+                                <Route
+                                    path="/single-product/:id/edit"
+                                    element={<ProductAdd />}
+                                />
                             </Routes>
                         </div>
                     </div>

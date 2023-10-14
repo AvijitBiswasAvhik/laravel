@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../css/product/SingleProduct.css";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function SingleProduct() {
     let [data, setData] = useState();
@@ -106,7 +107,9 @@ export default function SingleProduct() {
                                 </h2>
                             </div>
                             <div className="col-12">
-                                <h5 className="single-product-price">${data && data.price.price}</h5>
+                                <h5 className="single-product-price">
+                                    ${data && data.price.price}
+                                </h5>
                                 <div className="divider"></div>
                             </div>
                             <div className="col-12">
@@ -143,13 +146,9 @@ export default function SingleProduct() {
                             <div className="col-12">
                                 <div className="single-product-description">
                                     <p>
-                                        <em>
-                                        {data && data.description}
-                                        </em>
+                                        <em>{data && data.description}</em>
                                     </p>
-                                    <p>
-                                    {data && data.description}
-                                    </p>
+                                    <p>{data && data.description}</p>
                                     <ul className="description-list">
                                         <li>
                                             100% Wool, Heavy 4 gauge thickness
@@ -157,6 +156,13 @@ export default function SingleProduct() {
                                         <li>Handmade in Nepal.</li>
                                     </ul>
                                 </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-12">
+                                <button className="btn btn-primary">
+                                    <Link to='edit' state= {data} className="text-secondary">Edith </Link>
+                                </button>
                             </div>
                         </div>
                     </div>

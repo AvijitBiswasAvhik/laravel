@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {useNavigate, Navigate} from 'react-router-dom';
+import {
+    useNavigate,
+    Navigate,
+    useParams,
+    useLocation,
+} from "react-router-dom";
 import axios from "axios";
 import "../../../css/product/ProductAdd.css";
 
-export default function ProductAdd() {
+export default function ProductAdd(props) {
     let [buttonToggle, setButtonToggle] = useState(true);
     let [details, setDetails] = useState();
     let [price, setPrice] = useState();
@@ -25,6 +30,9 @@ export default function ProductAdd() {
     });
     let [handleError, setHandleError] = useState({});
     let navigate = useNavigate();
+    let { id } = useParams();
+    let { state } = useLocation();
+
     let buttonOn = {
         butttonToggle: { translate: "100%", transition: ".5s" },
         butttonSwitch: { backgroundColor: "#450BA5", transition: ".5s" },
@@ -66,33 +74,54 @@ export default function ProductAdd() {
     //// send data to server ///
     const postData = () => {
         axios
-            .post("http://127.0.0.1:8000/api/product/create", formData)
+            .post(
+                `http://127.0.0.1:8000/api/product/${
+                    formData.id ? "update" : "create"
+                }`,
+                formData
+            )
             .then((response) => {
                 // Handle a successful response here if needed
                 setHandleError({});
-                navigate('/home');
+                
+                navigate("/home");
             })
             .catch((error) => {
                 // Handle errors here
-                
-                    let errors = error.response.data.errors;
 
-                    // Log the errors to the console for debugging
+                let errors = error.response.data.errors;
 
-                    // Create an error object to store the error messages
-                    let errorObj = {};
+                // Log the errors to the console for debugging
 
-                    // Loop through the errors and store them in the error object
-                    for (let key in errors) {
-                        errorObj[key] = errors[key][0];
-                    }
-                    let data = errorObj.price ? JSON.parse(errorObj.price): '';
-                errorObj = {...errorObj, price: {...data}}
-                    // Update your state with the error object
-                    setHandleError(errorObj);
+                // Create an error object to store the error messages
+                let errorObj = {};
+
+                // Loop through the errors and store them in the error object
+                for (let key in errors) {
+                    errorObj[key] = errors[key][0];
+                }
+                let data = errorObj.price ? JSON.parse(errorObj.price) : "";
+                errorObj = { ...errorObj, price: { ...data } };
+                // Update your state with the error object
+                setHandleError(errorObj);
             });
     };
-    console.log(handleError);
+    // console.log(handleError);
+    useEffect(() => {
+        if (state) {
+            setFormData({
+                ...state,
+                sku: state.sku == null ? "" : state.sku,
+                price: {
+                    ...state.price,
+                    tax: state.tax == 0 ? false : true,
+                    stock: state.stock == 0 ? false : true,
+                },
+            });
+        }
+    }, []);
+    console.log(formData);
+    //edit product section//
     ///////////////////////
     //console.log(handleError);
     return (
@@ -309,7 +338,9 @@ export default function ProductAdd() {
                                     {formData.image && (
                                         <img
                                             src={
-                                                formData.image
+                                                formData.image.length > 50
+                                                    ? formData.image
+                                                    : "/" + formData.image
                                             }
                                             alt=""
                                             className="product-image-show"

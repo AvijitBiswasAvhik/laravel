@@ -31,7 +31,7 @@ class StoreProductRequest extends FormRequest
             'description' => 'required|string|max:1000',
             'category' => 'required|string|max:50',
             'status' => 'required|string|max:60',
-            'image' => ['string', new Base64Image()],
+            'image' => ['string','unique:products,image', new Base64Image()],
             'price' => ['required', new Price],
         ];
     }
