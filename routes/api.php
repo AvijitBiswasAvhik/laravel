@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SingleProduct;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +24,10 @@ Route::middleware('auth:sanctum')->group(function (){
 });
 Route::post('/product/create',[ProductController::class, 'create']);
 Route::post('/product/update',[ProductController::class, 'update']);
+Route::post('/product/delete/{id}',[ProductController::class, 'destroy']);
 Route::get('/products',[ProductController::class, 'index']);
-
+Route::get('/feature/products',[ProductController::class, 'featureProduct']);
+Route::get('/single-product-get/{id}', [SingleProduct::class, 'singleProduct']);
+Route::get('/hello',[ProductController::class, 'hello']);
 
 

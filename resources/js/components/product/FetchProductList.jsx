@@ -4,6 +4,7 @@ import "../../../css/product/FetchProductList.css";
 import { Link } from "react-router-dom";
 export default function FetchProductList() {
     let [listProduct, setListProduct] = useState();
+    let [removeProduct, setRemoveProduct] = useState(true);
     useEffect(() => {
         axiosClient
             .get("/products")
@@ -14,7 +15,7 @@ export default function FetchProductList() {
             .catch((error) => {
                 console.log(error.response.data);
             });
-    }, []);
+    }, [removeProduct]);
     let fetchProduct = (e) => {
         console.log(e.target.dataset.id);
         let link = e.target.dataset.id;
@@ -29,6 +30,20 @@ export default function FetchProductList() {
                     console.log(error.response.data);
                 });
         }
+    };
+
+    let deleteProduct = (e) => {
+        e.preventDefault();
+        let id = e.currentTarget.dataset.id;
+        axiosClient.post(`/product/delete/${id}`)
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((error) => {
+            console.log(error.response.data);
+        })
+        setRemoveProduct(!removeProduct)
+        
     };
     // console.log(listProduct);
     return (
@@ -92,6 +107,10 @@ export default function FetchProductList() {
                                             <button
                                                 type="buuton"
                                                 className="btn border border-1 p-0"
+                                                data-id={product.id}
+                                                onClick={(e) => {
+                                                    deleteProduct(e);
+                                                }}
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -137,7 +156,9 @@ export default function FetchProductList() {
                             return (
                                 <li className="page-item" key={product.label}>
                                     <p
-                                        className={`page-link ${product.active && 'active'}`}
+                                        className={`page-link ${
+                                            product.active && "active"
+                                        }`}
                                         href="#"
                                         onClick={(e) => {
                                             fetchProduct(e);
@@ -149,7 +170,9 @@ export default function FetchProductList() {
                                         }}
                                     >
                                         {/*product.label*/}
-                                        {product.label.replace('&laquo; Previous', '<').replace('Next &raquo;', '>')}
+                                        {product.label
+                                            .replace("&laquo; Previous", "<")
+                                            .replace("Next &raquo;", ">")}
                                     </p>
                                 </li>
                             );

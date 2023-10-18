@@ -22,7 +22,6 @@ const DefaultComponent = () => {
     function cart(){
         setShowCart(!showCart);
     }
-    console.log(location)
     let style = {};
     if (location.pathname == "/") {
         style = {

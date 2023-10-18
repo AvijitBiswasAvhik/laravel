@@ -1,9 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../assets/css/productview/ProductView.css";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import axiosClient from "../axisos";
+import {useStateContext } from "../context/ContextProvider";
 
 export default function ProductView() {
     const { category } = useParams();
+    let [product, setProduct] = useState();
+    let {addToCart} = useStateContext();
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axiosClient.get("/feature/products");
+                setProduct(response.data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
+
+        fetchData();
+    }, []);
+    function wordCount(word) {
+        const words = word.split(" ");
+        const first20Words = words.slice(0, 12);
+        const result = first20Words.join(" ");
+        return result + "...";
+    }
+    console.log(product);
     console.log(category);
     return (
         <div className="product-view-container text-center">
@@ -18,14 +41,30 @@ export default function ProductView() {
                     <div className="col-12">
                         <div className="filter-dropdown">
                             <label htmlFor="sortBy">Sort by</label>
-                            <select name="" id="sortBy" className="filter-dropdown-select">
+                            <select
+                                name=""
+                                id="sortBy"
+                                className="filter-dropdown-select"
+                            >
                                 <option value="manual">Featured</option>
-                                <option value="best-selling">Best selling</option>
-                                <option value="title-ascending">Alphabetically, Z-A</option>
-                                <option value="price-ascending">Price, low to high</option>
-                                <option value="price-descending">Price, high to low</option>
-                                <option value="created-ascending">Date, old to new</option>
-                                <option value="created-descending">Date, new to old</option>
+                                <option value="best-selling">
+                                    Best selling
+                                </option>
+                                <option value="title-ascending">
+                                    Alphabetically, Z-A
+                                </option>
+                                <option value="price-ascending">
+                                    Price, low to high
+                                </option>
+                                <option value="price-descending">
+                                    Price, high to low
+                                </option>
+                                <option value="created-ascending">
+                                    Date, old to new
+                                </option>
+                                <option value="created-descending">
+                                    Date, new to old
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -40,15 +79,41 @@ export default function ProductView() {
                 </div>
             </div>
             <div className="product-view-section">
+                {product &&
+                    product.data.map((el, i) => {
+                        return (
+                            <div className="product-view" key={el.barcode}>
+                                <div className="card">
+                                    <img
+                                        src={`http://127.0.0.1:8000/${el.image}`}
+                                        className="card-img-top"
+                                        alt="..."
+                                    />
+                                    <div className="card-body">
+                                        <Link to={`/product/single/${el.id}`} className="text text-decoration-none">
+                                            <h5 className="card-title ">
+                                                {el.name}
+                                            </h5>
+                                            <p className="card-text">
+                                                {wordCount(el.description)}
+                                            </p>
+                                        </Link>
+                                        <div className="price-section">
+                                            <del className="card-title">
+                                                ${el.price.price}
+                                            </del>
+                                            <h6>${el.price.discount_price}</h6>
+                                        </div>
+                                        <button className="btn btn-primary" onClick={()=>{addToCart(el.id)}}>
+                                            ADD TO CART
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+
                 <div className="product-view">item 1</div>
-                <div className="product-view">item 2</div>
-                <div className="product-view">item 3</div>
-                <div className="product-view">item 4</div>
-                <div className="product-view">item 5</div>
-                <div className="product-view">item 6</div>
-                <div className="product-view">item 7</div>
-                <div className="product-view">item 8</div>
-                <div className="product-view">item 9</div>
             </div>
         </div>
     );

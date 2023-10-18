@@ -25,6 +25,11 @@ class ProductController extends Controller
         $data = Product::paginate(2);
         return Products::collection($data);
     }
+    public function featureProduct()
+    {
+        $data = Product::take(5)->get();
+        return Products::collection($data);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -76,7 +81,8 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return 'hello world';
+
     }
 
     /**
@@ -109,6 +115,8 @@ class ProductController extends Controller
         } else {
             throw new \Exception('invalid image type');
         }
+
+
         // $allData = $record->all();
         // $allimg = [];
         // foreach ($allData as $key) {
@@ -119,11 +127,11 @@ class ProductController extends Controller
         // $files = array_filter($filesAndDirectories, function ($item) use ($dir) {
         //     return is_file($dir . '/' . $item);
         // });
-        
+
         // foreach ($files as $key) {
-            
+
         //     if(!in_array($dir.$key, $allimg)){
-               
+
         //         if (File::exists($dir.$key)) {
         //         File::delete($dir.$key);
         //     }
@@ -135,9 +143,19 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product, $id)
     {
-        //
+        if($id){
+            $product = Product::find($id);
+            $confirm = $this->deleteImage($product->image);
+            if($confirm){
+                $product->delete();
+            }
+            
+           }
+    }
+    public function hello(){
+        return 'hello';
     }
     public function saveImage($image, $update)
     {
@@ -169,6 +187,14 @@ class ProductController extends Controller
             return $image;
         } else {
             return 'error';
+        }
+    }
+
+    public function deleteImage($image){
+        if(File::exists($image)){
+            if(File::delete($image)){
+                return true;
+            }
         }
     }
 }

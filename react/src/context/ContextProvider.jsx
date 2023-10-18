@@ -4,11 +4,15 @@ const StateContext =  createContext({
   setCart : () => {},
   menu : {},
   setMenu : ()=> {},
+  addToCart : ()=> {},
 })
 
 export function ContextProvider({children}) {
   const [cart, setCart] = useState([]);
   const [menu, setMenu] = useState(['Home', 'Men', 'Women', 'Bags', 'Outdoor']);
+  let addToCart = (id) => {
+    console.log(id);
+  };
   return (
     <StateContext.Provider 
     value={{
@@ -16,6 +20,7 @@ export function ContextProvider({children}) {
       setCart,
       menu,
       setMenu,
+      addToCart
     }}
     >
       {children}
