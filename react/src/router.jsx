@@ -4,6 +4,7 @@ import DefaultComponent from "./components/DefaultComponents";
 import LandingPage from "./view/LandingPage";
 import ProductView from "./components/ProductView";
 import SingleProductView from "./components/SingleProductView";
+import Login from "./components/Login";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
             {
                 path: 'product/single/:id',
                 element: <SingleProductView />,
+            },
+            {
+                path: 'product/login',
+                element: <Login />,
             }
         ]
     }

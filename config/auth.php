@@ -40,6 +40,17 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'api' => [
+            'driver' => 'session',
+            'provider' => 'users', // Use 'buyers' as the provider for API authentication
+        ],
+
+        'buyer' => [
+            'driver' => 'session',
+            'provider' => 'buyers', // Use 'buyers' as the provider for API authentication
+        ],
+
+        
     ],
 
     /*
@@ -65,10 +76,10 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'buyers' => [ // Use 'buyers' as the provider name
+            'driver' => 'eloquent',
+            'model' => App\Models\Buyer::class, // Use the Buyer model
+        ],
     ],
 
     /*
@@ -97,6 +108,12 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+        'buyers' => [
+            'provider' => 'buyers',
+            'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
     ],
 
     /*
@@ -110,6 +127,6 @@ return [
     |
     */
 
-    'password_timeout' => 10800,
+    'password_timeout' => 60,//10800,
 
 ];

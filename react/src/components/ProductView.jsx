@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import "../assets/css/productview/ProductView.css";
 import { useParams, Link } from "react-router-dom";
 import axiosClient from "../axisos";
-import {useStateContext } from "../context/ContextProvider";
+import { useStateContext } from "../context/ContextProvider";
 
 export default function ProductView() {
     const { category } = useParams();
     let [product, setProduct] = useState();
-    let {addToCart} = useStateContext();
+    let { addToCart } = useStateContext();
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -26,10 +26,27 @@ export default function ProductView() {
         const result = first20Words.join(" ");
         return result + "...";
     }
-    console.log(product);
-    console.log(category);
+    let buyer = () => {
+        axiosClient
+            .get("/attach")
+            .then((response) => {
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+    };
     return (
         <div className="product-view-container text-center">
+            <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={() => {
+                    buyer();
+                }}
+            >
+                Submit
+            </button>
             <div className="containert">
                 <div className="row mt-5">
                     <div className="col-12">
@@ -90,7 +107,10 @@ export default function ProductView() {
                                         alt="..."
                                     />
                                     <div className="card-body">
-                                        <Link to={`/product/single/${el.id}`} className="text text-decoration-none">
+                                        <Link
+                                            to={`/product/single/${el.id}`}
+                                            className="text text-decoration-none"
+                                        >
                                             <h5 className="card-title ">
                                                 {el.name}
                                             </h5>
@@ -104,7 +124,12 @@ export default function ProductView() {
                                             </del>
                                             <h6>${el.price.discount_price}</h6>
                                         </div>
-                                        <button className="btn btn-primary" onClick={()=>{addToCart(el.id)}}>
+                                        <button
+                                            className="btn btn-primary"
+                                            onClick={() => {
+                                                addToCart(el.id);
+                                            }}
+                                        >
                                             ADD TO CART
                                         </button>
                                     </div>

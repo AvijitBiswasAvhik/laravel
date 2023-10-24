@@ -7,15 +7,16 @@ import { faBars, faCartShopping,faMagnifyingGlass} from "@fortawesome/free-solid
 import "../assets/css/DefaultComponent/DefaultComponent.css";
 import { useStateContext } from "../context/ContextProvider";
 import MenuBar from "./MenuBar";
-import Cart from "./cart";
+import Cart from "./Cart";
 import Footer from "./Footer";
+import Login from "./Login";
 
 
 const DefaultComponent = () => {
     const location = useLocation();
     const [showSideBar, setShowSideBar] = useState(false);
     const [showCart, setShowCart] = useState(false);
-    const {menu} = useStateContext();
+    const {menu, styles} = useStateContext();
     function sideBar(){
         setShowSideBar(!showSideBar);
     }
@@ -46,7 +47,7 @@ const DefaultComponent = () => {
                 <div className="nav-links">
                 <ul className="nav-items">
                     {menu && menu.map((el)=>{
-                        return(<li className="navigation-link" key={el}>{el}</li>)
+                        return(<li className="navigation-link text-decoration-none" key={el}><Link to={`product/${el}` }>{el}</Link></li>)
                     })}
                     <li className="navigation-search"><FontAwesomeIcon icon={faMagnifyingGlass} className="search-icon" /></li>
                     <li onClick={cart}><FontAwesomeIcon icon={faCartShopping} className="shoping-cart"/></li>
@@ -56,6 +57,7 @@ const DefaultComponent = () => {
             </div>
             {showSideBar && <MenuBar menu = {menu} sideBar= {sideBar}/>}
             {showCart && <Cart cart= {cart}/>}
+            {styles && <Login />}
             <Outlet />
             <Footer />
         </>

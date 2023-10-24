@@ -13,7 +13,6 @@
 .product-view-title{
   font-family: 'Old';
 }
-
 .filter-dropdown:nth-child(1){
   font-family: 'Old';
   font-size: 14px;
@@ -65,10 +64,11 @@
 .product-view-section{
   display: grid;
   /* grid-template-rows: repeat(auto, 230px); */
-  grid-template-rows: repeat(20, 200px);
+  grid-template-rows: repeat(2, 200px);
   padding: 10px;
   gap: 10px;
   overflow: hidden;
+  height: fit-content;
 }
 .product-view{
   box-shadow: 0 0 8px grey;
