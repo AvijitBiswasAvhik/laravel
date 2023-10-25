@@ -15,11 +15,23 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('buyer_id');
             $table->unsignedBigInteger('product_id');
-            $table->string('status',30);
+            $table->string('status', 30)->default('active');
+            $table->integer('qty')->default(1);
             $table->timestamps();
-            $table->foreign('buyer_id')->references('id')->on('buyers')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            
+            $table->foreign('buyer_id')
+                  ->references('id')
+                  ->on('buyers')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade'); // Add onUpdate if applicable
+            
+            $table->foreign('product_id')
+                  ->references('id')
+                  ->on('products')
+                  ->onDelete('cascade')
+                  ->onUpdate('cascade'); // Add onUpdate if applicable
         });
+        
     }
 
     /**

@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
   // Your protected routes for buyers
   Route::get('/hello',[BuyerController::class, 'hello']);
   Route::get('/add-to-cart/{id}',[BuyerController::class, 'addToCart']);
+  Route::get('/cart-data',[BuyerController::class, 'sentCartData']);
  
 });
 Route::post('/login',[BuyerController::class, 'login']);//->middleware('auth:sanctum','abilities:check-status,place-orders');

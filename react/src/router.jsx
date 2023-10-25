@@ -5,6 +5,7 @@ import LandingPage from "./view/LandingPage";
 import ProductView from "./components/ProductView";
 import SingleProductView from "./components/SingleProductView";
 import Login from "./components/Login";
+import SignUp from "./components/SignUp";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
             {
                 path: 'product/login',
                 element: <Login />,
+            },
+            {
+                path: '/signup',
+                element: <SignUp />,
             }
         ]
     }

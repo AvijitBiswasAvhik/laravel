@@ -13,7 +13,8 @@ const StateContext = createContext({
     setMenu: () => {},
     addToCart: () => {},
     styles: {},
-    addToTable: () => {}
+    addToTable: () => {},
+    cartData: {},
 });
 
 export function ContextProvider({ children }) {
@@ -27,23 +28,36 @@ export function ContextProvider({ children }) {
     ]);
     let [buyerData, setBuyerData] = useState(null);
     let [styles, setStyles] = useState(false);
+    let [cartData, setCartData] = useState(null);
+
     let addToCart = (id) => {
         if (localStorage.getItem("TOKEN") == null || styles === true) {
             setStyles(!styles);
         }
-        if(localStorage.getItem("TOKEN") != null) {
-
-            axiosClient.get(`add-to-cart/${id}`)
+        if (localStorage.getItem("TOKEN") != null) {
+            axiosClient
+                .get(`add-to-cart/${id}`)
+                .then((response) => {
+                    console.log(response.data);
+                    setCartData(response.data);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+        }
+    };
+    useEffect(() => {
+        axiosClient
+            .get("/cart-data")
             .then((response) => {
+                setCartData(response.data);
                 console.log(response.data);
             })
             .catch((error) => {
                 console.log(error.message);
             });
-        }
-        
-    };
-    let addToTable = (id) => {}
+    }, []);
+    let addToTable = (id) => {};
     return (
         <StateContext.Provider
             value={{
@@ -53,6 +67,7 @@ export function ContextProvider({ children }) {
                 setMenu,
                 addToCart,
                 styles,
+                cartData,
             }}
         >
             {children}

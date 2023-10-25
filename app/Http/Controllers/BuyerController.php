@@ -95,28 +95,28 @@ class BuyerController extends Controller
      */
     public function addToCart($id)
     {
-        // $buyer = Auth::user();
-        // $buyerId = $buyer->id;
-        // $productId = intval($id);
-        // $data = [
-        //     'buyer_id' => $buyerId,
-        //     'product_id' => $productId,
-        //     'status' => 'active',
-        // ];
-        // $status = Order::create($data);
-        // if($status){
-
-        // }
-        $buyer = Buyer::find(3);
+        $buyerId = Auth::user()->id;
+        $productId = intval($id);
+        $buyer = Buyer::find($buyerId);
+        $dataProduct = $buyer->orders()->sync($productId);
         $data = $buyer->orders;
         return response(json_encode($data));
     }
+    // sent cart data function   
+    public function sentCartData()
+    {
+        $buyerId = Auth::user()->id;
+        $buyer = Buyer::find($buyerId);
+        $orders = $buyer->orders;
+        $data = $orders->load('prices');
+        return response(json_encode($data));
+    }
     public function store(Request $request, Buyer $buyer)
-    { 
-        $buyer = Buyer::find(3);
-        $data = $buyer->orders;
-        $product = Product::find($data[0]->product_id);
-        return response(json_encode($product));
+    {
+        // $buyer = Buyer::find(3);
+        // $data = $buyer->orders;
+        // $product = Product::find($data[0]->product_id);
+        // return response(json_encode($product));
     }
 
     /**

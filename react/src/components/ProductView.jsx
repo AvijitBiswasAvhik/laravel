@@ -28,7 +28,7 @@ export default function ProductView() {
     }
     let buyer = () => {
         axiosClient
-            .get("/attach")
+            .get(`/attach`)
             .then((response) => {
                 console.log(response.data);
             })
