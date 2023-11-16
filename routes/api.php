@@ -34,7 +34,9 @@ Route::middleware('auth:sanctum')->group(function () {
   Route::get('/hello',[BuyerController::class, 'hello']);
   Route::get('/add-to-cart/{id}',[BuyerController::class, 'addToCart']);
   Route::get('/cart-data',[BuyerController::class, 'sentCartData']);
- 
+  Route::post('/order/add-qty/{id}',[BuyerController::class, 'addQty']);
+  Route::get('/order/total-price',[BuyerController::class, 'totalPrice']);
+  Route::get('/order/cart-item-delete/{id}',[BuyerController::class, 'deleteCartItem']);
 });
 Route::post('/login',[BuyerController::class, 'login']);//->middleware('auth:sanctum','abilities:check-status,place-orders');
 

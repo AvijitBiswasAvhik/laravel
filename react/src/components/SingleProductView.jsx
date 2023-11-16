@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import "../assets/css/SingleProductView.css";
 import axiosClient from "../axisos";
 import { useParams } from "react-router-dom";
+import { useStateContext } from "../context/ContextProvider";
 
 export default function SingleProductView() {
     let [product, setProduct] = useState();
+    let { addToCart } = useStateContext();
     let { id } = useParams();
     console.log(id);
     useEffect(() => {
@@ -14,7 +16,7 @@ export default function SingleProductView() {
                     `/single-product-get/${id}`
                 );
                 setProduct(response.data);
-                console.log(response.data);
+                console.log(response.data.id);
             } catch (error) {
                 console.log(error.message);
             }
@@ -173,7 +175,7 @@ export default function SingleProductView() {
                                     </div>
                                     <div className="col-12">
                                         <div className="single-product-buttons">
-                                            <button className="single-add-cart">
+                                            <button className="single-add-cart" onClick={()=>{addToCart(product.id)}}>
                                                 ADD TO CART
                                             </button>
                                             <button className="single-buy">

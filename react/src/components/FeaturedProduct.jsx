@@ -18,7 +18,6 @@ export default function FeaturedProduct({ image }) {
 
         fetchData();
     }, []);
-    console.log(product);
     return (
         <>
             <h1 className="fetured-title text-center">Featured Product</h1>

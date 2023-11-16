@@ -8,6 +8,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\TotalPrice;
 
 class Buyer extends Authenticatable
 {
@@ -19,6 +20,10 @@ class Buyer extends Authenticatable
         'password',
     ];
     public function orders() {
-        return $this->belongsToMany(Product::class,'orders', 'buyer_id')->withTimestamps();
+        return $this->belongsToMany(Product::class,'orders', 'buyer_id')->withPivot('id','qty');
+    }
+
+    public function totalPrice() {
+        return $this->hasOne(TotalPrice::class);
     }
 }

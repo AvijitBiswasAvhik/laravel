@@ -1,18 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../assets/css/DefaultComponent/cart.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useStateContext } from "../context/ContextProvider";
 
 export default function Cart({ cart }) {
-    let { cartData } = useStateContext();
-    console.log(cartData);
+    let { cartData, addQty,totalPrice, deleteCartItem } = useStateContext();
+    
     return (
         <div id="cart">
             <div className="cartHandle" onClick={cart}>
                 <FontAwesomeIcon icon={faX} />
             </div>
             <div className="container p-3">
+                <div className="row p-3">
+                    <div className="col-12 text-dark shadow-lg d-flex align-items-center justify-content-around">
+                        <p className="mt-2">
+                            Sub Total: <b>${totalPrice && totalPrice.total_price}</b>
+                        </p>
+                        <button
+                            type="button"
+                            className="btn btn-outline-success"
+                        >
+                            CheckOut
+                        </button>
+                    </div>
+                </div>
                 <div className="row p-2">
                     {cartData &&
                         cartData.map((el, i) => {
@@ -43,7 +56,13 @@ export default function Cart({ cart }) {
                                                             }
                                                         </td>
                                                         <td>Total:</td>
-                                                        <td>$20</td>
+                                                        <td>
+                                                            $
+                                                            {
+                                                                el.prices
+                                                                    .totalPrice
+                                                            }
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -53,20 +72,34 @@ export default function Cart({ cart }) {
                                                 <select
                                                     className="form-select"
                                                     aria-label="Default select example"
+                                                    name="example"
+                                                    defaultValue={el.pivot.qty}
+                                                    onChange={(e) => {
+                                                        addQty(
+                                                            el.id,
+                                                            e.target.value,
+                                                            el.pivot.buyer_id,
+                                                            el.pivot.id
+                                                        );
+                                                    }}
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
                                                 >
-                                                    <option>1</option>
-                                                    <option value="1">
-                                                        One
-                                                    </option>
-                                                    <option value="2">
-                                                        Two
-                                                    </option>
-                                                    <option value="3">
-                                                        Three
-                                                    </option>
+                                                    {Array.from(
+                                                        { length: 20 },
+                                                        (_, i) => (
+                                                            <option
+                                                                key={i}
+                                                                value={i + 1}
+                                                            >
+                                                                {i + 1}
+                                                            </option>
+                                                        )
+                                                    )}
                                                 </select>
                                             </div>
-                                            <button className="cart-item-delete">
+                                            <button className="cart-item-delete" onClick={()=>{deleteCartItem(el.pivot.id)}}>
                                                 <FontAwesomeIcon
                                                     icon={faTrash}
                                                 />

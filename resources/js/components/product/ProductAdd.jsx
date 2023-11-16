@@ -120,7 +120,6 @@ export default function ProductAdd(props) {
             });
         }
     }, []);
-    console.log(formData);
     //edit product section//
     ///////////////////////
     //console.log(handleError);

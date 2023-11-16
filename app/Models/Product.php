@@ -26,6 +26,6 @@ class Product extends Model
         return $this->hasOne(Price::class);
     }
     public function orders(){
-        return $this->belongsToMany(Buyer::class, 'orders', 'buyer_id')->withTimestamps();
+        return $this->belongsToMany(Buyer::class, 'orders', 'buyer_id')->withPivot('id','qty');
     }
 }

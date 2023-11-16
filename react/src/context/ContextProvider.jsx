@@ -4,6 +4,7 @@ import React, {
     useState,
     useEffect,
     Children,
+    addQty,
 } from "react";
 import axiosClient from "../axisos";
 const StateContext = createContext({
@@ -15,6 +16,9 @@ const StateContext = createContext({
     styles: {},
     addToTable: () => {},
     cartData: {},
+    addQty: () => {},
+    totalPrice: {},
+    deleteCartItem: () =>{},
 });
 
 export function ContextProvider({ children }) {
@@ -29,6 +33,7 @@ export function ContextProvider({ children }) {
     let [buyerData, setBuyerData] = useState(null);
     let [styles, setStyles] = useState(false);
     let [cartData, setCartData] = useState(null);
+    let [totalPrice, setTotalPrice] = useState(null);
 
     let addToCart = (id) => {
         if (localStorage.getItem("TOKEN") == null || styles === true) {
@@ -38,7 +43,14 @@ export function ContextProvider({ children }) {
             axiosClient
                 .get(`add-to-cart/${id}`)
                 .then((response) => {
-                    console.log(response.data);
+                    setCartData(response.data);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+            axiosClient
+                .get("/cart-data")
+                .then((response) => {
                     setCartData(response.data);
                 })
                 .catch((error) => {
@@ -46,17 +58,55 @@ export function ContextProvider({ children }) {
                 });
         }
     };
+    let deleteCartItem = (id)=>{
+        axiosClient
+                .get(`/order/cart-item-delete/${id}`)
+                .then((response) => {
+                    setCartData(response.data);
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+    };
     useEffect(() => {
         axiosClient
             .get("/cart-data")
             .then((response) => {
                 setCartData(response.data);
-                console.log(response.data);
+            })
+            .catch((error) => {
+                
+                if (localStorage.getItem("TOKEN") == null || styles === true) {
+                    setStyles(!styles);
+                }
+                console.log(error.message);
+            });
+    }, []);
+    let addQty = (id, value, buyer, order) => {
+        let data = { id: id, value: value, buyer: buyer, order: order };
+        axiosClient
+            .post(`/order/add-qty/${id}`, data)
+            .then((response) => {
+                setCartData(response.data)
             })
             .catch((error) => {
                 console.log(error.message);
             });
-    }, []);
+    };
+
+    useEffect(() => {
+        axiosClient
+            .get(`/order/total-price`)
+            .then((response) => {
+                setTotalPrice(response.data);
+            })
+            .catch((error) => {
+                if (localStorage.getItem("TOKEN") == null || styles === true) {
+                    setStyles(!styles);
+                }
+                console.log(error.message);
+            });
+    }, [cartData]);
     let addToTable = (id) => {};
     return (
         <StateContext.Provider
@@ -68,6 +118,9 @@ export function ContextProvider({ children }) {
                 addToCart,
                 styles,
                 cartData,
+                addQty,
+                totalPrice,
+                deleteCartItem,
             }}
         >
             {children}

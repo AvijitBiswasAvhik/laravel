@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
+use Illuminate\Http\Request as ApiRequest;
+use Illuminate\Support\Facades\DB;
+use App\Models\TotalPrice;
+
+use function PHPUnit\Framework\returnSelf;
 
 class BuyerController extends Controller
 {
@@ -98,18 +103,80 @@ class BuyerController extends Controller
         $buyerId = Auth::user()->id;
         $productId = intval($id);
         $buyer = Buyer::find($buyerId);
-        $dataProduct = $buyer->orders()->sync($productId);
-        $data = $buyer->orders;
+
+        $orders = $buyer->orders;
+        $data = $orders->load('prices');
+        $exists = $exists = Order::where('product_id', $productId)->exists();
+        if (!$exists) {
+            $dataProduct = $buyer->orders()->attach($productId);
+        }
         return response(json_encode($data));
     }
     // sent cart data function   
-    public function sentCartData()
+    public function sentCartData($total = false)
     {
         $buyerId = Auth::user()->id;
         $buyer = Buyer::find($buyerId);
         $orders = $buyer->orders;
         $data = $orders->load('prices');
+        //$qty = $data[0]->pivot->qty;
+        $arr = [];
+        $quantity = [];
+        foreach ($data as $key => $val) {
+            $qty = $data[$key]->pivot->qty;
+            $totalPrice = $data[$key]->prices->discount_price;
+            $data[$key]->prices->totalPrice = $totalPrice * $qty;
+            array_push($arr, $totalPrice * $qty);
+            array_push($quantity, $qty);
+        }
+        if ($total === true) {
+            $totalPrice = array_reduce($arr, function ($carry, $current) {
+
+                return $carry + $current;
+            });
+            $qu = array_reduce($quantity, function ($carry, $current) {
+
+                return $carry + $current;
+            });
+            $totalData = [
+                'total_price' => $totalPrice,
+                'total_product' => $qu,
+            ];
+            return $totalData;
+        }
         return response(json_encode($data));
+    }
+    public function addQty(ApiRequest $request)
+    {
+        $data = $request->validate([
+            'id' => 'required|integer',
+            'value' => 'required|integer|max:20',
+            'buyer' => 'required|integer',
+            'order' => 'required|integer',
+        ]);
+
+        if (Auth::user()->id == $data['buyer']) {
+            DB::table('orders')
+                ->where('id', $data['order'])
+                ->where('buyer_id', $data['buyer'])
+                ->update(['qty' => $data['value']]);
+            //$totalPrice = TotalPrice::
+            return $this->sentCartData(null);
+        }
+    }
+
+    public function totalPrice()
+    {
+        $totalPrice = $this->sentCartData(true);
+        $totalPrice['buyer_id'] = Auth::user()->id;
+        $total = TotalPrice::where('buyer_id', Auth::user()->id)->first();
+
+        if ($total) {
+            $total->update($totalPrice);
+        } else {
+            TotalPrice::create($totalPrice);
+        }
+        return $total;
     }
     public function store(Request $request, Buyer $buyer)
     {
@@ -117,6 +184,15 @@ class BuyerController extends Controller
         // $data = $buyer->orders;
         // $product = Product::find($data[0]->product_id);
         // return response(json_encode($product));
+    }
+    public function deleteCartItem($id){
+
+        $order = Order::find($id);
+        $order->delete();
+        $data = $this->sentCartData();
+
+        $this->totalPrice();
+        return $data;
     }
 
     /**
