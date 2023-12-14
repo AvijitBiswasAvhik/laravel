@@ -14,6 +14,11 @@ use App\Models\Product;
 use Illuminate\Http\Request as ApiRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\TotalPrice;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\CustomVerifyEmail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\URL;
 
 use function PHPUnit\Framework\returnSelf;
 
@@ -71,16 +76,48 @@ class BuyerController extends Controller
 
     public function signup(StoreBuyerRequest $request)
     {
+
+
+
         $data = $request->validated();
         $data['password'] = Hash::make($data["password"]);
         $buyer = Buyer::create($data);
         $token = $buyer->createToken('Buyer Token')->plainTextToken;
-
-
+        $senMail = $this->CreateEmailVerifiy($buyer);
+        //return response()->json(['msg'=>$buyer]);
         return response([
             'user' => $buyer,
             'token' => $token
         ]);
+    }
+
+    public function CreateEmailVerifiy($buyer = null)
+    {
+        if($buyer == null){
+            $userData = auth()->user();
+            $buyer = Buyer::find($userData['id']);
+            //return response()->json(['msg'=>$buyer]);
+        }
+        $random = Str::random(40);
+        $domain = URl::to('/');
+
+
+        $url = $domain . '/api/verify-email/' . $buyer['id'] . '/' . $random;
+
+        $buyer->title = 'Verify Youre Email';
+        $buyer->body = 'Please Click here to verify your email';
+        $buyer->url = $url;
+        //$buyer->notify( new CustomVerifyEmail($buyer->name));
+
+        Mail::send('EmailVerify', ['data' => $buyer], function ($message) use ($buyer) {
+            $message->to($buyer->email)->subject($buyer['title']);
+        });
+        if ($buyer) {
+            $buyer =  Buyer::find($buyer['id']);
+            $buyer['remember_token'] = $random;
+            $buyer->update();
+            return $buyer;
+        }
     }
     public function hello()
     {
@@ -104,11 +141,11 @@ class BuyerController extends Controller
         $productId = intval($id);
         $buyer = Buyer::find($buyerId);
 
-        $orders = $buyer->orders;
+        $orders = $buyer->products;
         $data = $orders->load('prices');
         $exists = $exists = Order::where('product_id', $productId)->exists();
         if (!$exists) {
-            $dataProduct = $buyer->orders()->attach($productId);
+            $dataProduct = $buyer->products()->attach($productId);
         }
         return response(json_encode($data));
     }
@@ -117,7 +154,7 @@ class BuyerController extends Controller
     {
         $buyerId = Auth::user()->id;
         $buyer = Buyer::find($buyerId);
-        $orders = $buyer->orders;
+        $orders = $buyer->products;
         $data = $orders->load('prices');
         //$qty = $data[0]->pivot->qty;
         $arr = [];
@@ -181,11 +218,12 @@ class BuyerController extends Controller
     public function store(Request $request, Buyer $buyer)
     {
         // $buyer = Buyer::find(3);
-        // $data = $buyer->orders;
+        // $data = $buyer->products;
         // $product = Product::find($data[0]->product_id);
         // return response(json_encode($product));
     }
-    public function deleteCartItem($id){
+    public function deleteCartItem($id)
+    {
 
         $order = Order::find($id);
         $order->delete();

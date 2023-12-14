@@ -1,25 +1,35 @@
 import React, { useState, useEffect } from "react";
 import "../assets/css/productview/ProductView.css";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import axiosClient from "../axisos";
 import { useStateContext } from "../context/ContextProvider";
+import { Helmet } from "react-helmet";
 
 export default function ProductView() {
     const { category } = useParams();
     let [product, setProduct] = useState();
     let { addToCart } = useStateContext();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const paymentStatus = queryParams.get("payment");
+
+    // Now 'paymentStatus' contains the value of the 'payment' parameter
+    console.log(paymentStatus);
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axiosClient.get("/feature/products");
+                const response = await axiosClient.get(
+                    `/feature/products/${category}`
+                );
                 setProduct(response.data);
             } catch (error) {
                 console.log(error.message);
             }
         };
-
-        fetchData();
-    }, []);
+        if (category) {
+            fetchData();
+        }
+    }, [category]);
     function wordCount(word) {
         const words = word.split(" ");
         const first20Words = words.slice(0, 12);
@@ -38,6 +48,18 @@ export default function ProductView() {
     };
     return (
         <div className="product-view-container text-center">
+            <Helmet>
+                <title>{category} - {window.location.hostname}</title>
+                <meta
+                    name="description"
+                    content="This is the checkout page of our website."
+                />
+                <meta
+                    name="keywords"
+                    content="checkout, payment, online shopping"
+                />
+                {/* Add any other meta tags as needed */}
+            </Helmet>
             <button
                 type="submit"
                 className="btn btn-primary"
@@ -50,7 +72,7 @@ export default function ProductView() {
             <div className="containert">
                 <div className="row mt-5">
                     <div className="col-12">
-                        <h1 className="product-view-title text-center">
+                        <h1 className="product-view-title text-center text-capitalize">
                             {category && category}
                         </h1>
                         <div className="divider"></div>

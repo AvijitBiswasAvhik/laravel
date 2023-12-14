@@ -5,7 +5,7 @@ import {
     useParams,
     useLocation,
 } from "react-router-dom";
-import axios from "axios";
+import axiosClient from "../../axios";
 import "../../../css/product/ProductAdd.css";
 
 export default function ProductAdd(props) {
@@ -73,9 +73,9 @@ export default function ProductAdd(props) {
     ///////////////////////
     //// send data to server ///
     const postData = () => {
-        axios
+        axiosClient
             .post(
-                `http://127.0.0.1:8000/api/product/${
+                `product/${
                     formData.id ? "update" : "create"
                 }`,
                 formData
@@ -83,7 +83,6 @@ export default function ProductAdd(props) {
             .then((response) => {
                 // Handle a successful response here if needed
                 setHandleError({});
-                
                 navigate("/home");
             })
             .catch((error) => {

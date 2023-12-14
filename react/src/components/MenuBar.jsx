@@ -13,10 +13,15 @@ export default function MenuBar({ menu, sideBar }) {
                         return (
                             <li key={i} className="sideBarMenue">
                                 <Link
-                                    to={`product/${el}`}
+                                    to={
+                                        el == "orders"
+                                            ? "orders"
+                                            : `product/${el}`
+                                    }
                                     style={{
                                         textDecoration: "none",
                                         color: "white",
+                                        textTransform: "capitalize",
                                     }}
                                 >
                                     {el}
@@ -25,7 +30,11 @@ export default function MenuBar({ menu, sideBar }) {
                         );
                     })}
             </ul>
-            <div className="menuHide" onClick={sideBar}>
+            <div
+                className="menuHide"
+                onClick={sideBar}
+                style={{ cursor: "pointer" }}
+            >
                 <FontAwesomeIcon icon={faX} />
             </div>
         </div>

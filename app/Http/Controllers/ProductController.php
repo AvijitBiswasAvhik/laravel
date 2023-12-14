@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Request;
 use App\Models\Price;
 use App\Http\Resources\Products;
 
+use function PHPUnit\Framework\returnSelf;
 
 class ProductController extends Controller
 {
@@ -25,9 +26,14 @@ class ProductController extends Controller
         $data = Product::paginate(2);
         return Products::collection($data);
     }
-    public function featureProduct()
+    public function featureProduct($type = 'home')
     {
-        $data = Product::take(5)->get();
+        if ($type == 'home') {
+            $data = Product::take(5)->get();
+        } elseif ($type != 'home') {
+            $data = Product::where('category', $type)->take(5)->get();
+        }
+
         return Products::collection($data);
     }
 
@@ -36,7 +42,6 @@ class ProductController extends Controller
      */
     public function create(StoreProductRequest $request)
     {
-
         $data = $request->validated();
         $data['image'] = $this->saveImage($data['image'], '');
         if (File::exists($data['image'])) {
@@ -82,7 +87,6 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         return 'hello world';
-
     }
 
     /**
@@ -145,16 +149,16 @@ class ProductController extends Controller
      */
     public function destroy(Product $product, $id)
     {
-        if($id){
+        if ($id) {
             $product = Product::find($id);
             $confirm = $this->deleteImage($product->image);
-            if($confirm){
+            if ($confirm) {
                 $product->delete();
             }
-            
-           }
+        }
     }
-    public function hello(){
+    public function hello()
+    {
         return 'hello';
     }
     public function saveImage($image, $update)
@@ -180,8 +184,8 @@ class ProductController extends Controller
             }
             $file = Str::random(12) . '.' . $type;
             $relativePath = $dir . $file;
-
-            file_put_contents($relativePath, $image);
+            $absolutePath = $dir . $file;
+            file_put_contents($absolutePath, $image);
             return $relativePath;
         } elseif (preg_match('/^product\/images\/[a-zA-Z0-9]+\.(jpeg|jpg|png|gif)$/', $image)) {
             return $image;
@@ -190,9 +194,10 @@ class ProductController extends Controller
         }
     }
 
-    public function deleteImage($image){
-        if(File::exists($image)){
-            if(File::delete($image)){
+    public function deleteImage($image)
+    {
+        if (File::exists($image)) {
+            if (File::delete($image)) {
                 return true;
             }
         }

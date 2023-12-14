@@ -6,11 +6,17 @@ import ProductView from "./components/ProductView";
 import SingleProductView from "./components/SingleProductView";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
+import Verify from "./components/Verify";
+import CheckOut from "./components/CheckOut";
+import MainComponent from "./components/MainComponent";
+import RefundPolicyPage from "./components/ReturnPolcy";
+import RefundRequestForm from "./components/RefundRequestForm";
+import Orders from "./components/Orders";
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <DefaultComponent />,
+        element: <MainComponent />,
         children: [
             {
                 path: '/',
@@ -25,17 +31,29 @@ const router = createBrowserRouter([
                 element: <ProductView />,
             },
             {
+                path: 'orders/',
+                element: <Orders />,
+            },
+            {
                 path: 'product/single/:id',
                 element: <SingleProductView />,
             },
             {
-                path: 'product/login',
-                element: <Login />,
+                path: '/verify',
+                element: <Verify />,
             },
             {
-                path: '/signup',
-                element: <SignUp />,
-            }
+                path: '/checkout',
+                element: <CheckOut/>,
+            },
+            {
+                path: '/return-policy',
+                element: <RefundPolicyPage />,
+            },
+            {
+                path: '/return-policy/submit',
+                element: <RefundRequestForm />,
+            },
         ]
     }
 ]);

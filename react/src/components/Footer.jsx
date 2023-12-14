@@ -1,17 +1,17 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "../assets/css/Footer.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-
 export default function Footer() {
     return (
-        
-
         <div className="footer-section">
             <div className="divider-footer"></div>
             <div className="footer-items">
                 <ul className="footer-menu footer-item-container">
-                    <li className="footer-item">Return policy</li>
+                    <li className="footer-item">
+                        <Link to="/return-policy">Return policy</Link>
+                    </li>
                     <li className="footer-item">Search our store</li>
                     <li className="footer-item">Blog</li>
                     <li className="footer-item">Contact us</li>

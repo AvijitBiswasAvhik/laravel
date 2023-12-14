@@ -95,3 +95,22 @@ background-color: transparent;
 .text-decoration-none{
     font-style: 'Arapey';
 }
+
+#cart-count-container{
+    position: relative;
+}
+#cart-count{
+    position: absolute;
+    top: 0px;
+    left: 18px;
+    color: rgb(0, 129, 241);
+    border-radius: 50%;
+    background-color: rgb(236, 201, 0);
+    height: 15px;
+    width: 15px;
+    display: flex;
+    align-items: center;
+    align-items: center;
+    justify-content: center;
+    font-size: small;
+}

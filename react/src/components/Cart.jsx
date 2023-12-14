@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "../assets/css/DefaultComponent/cart.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -22,7 +23,7 @@ export default function Cart({ cart }) {
                             type="button"
                             className="btn btn-outline-success"
                         >
-                            CheckOut
+                           <Link to="/checkout" className="text-decoration-none" state={{cartData,totalPrice}}> CheckOut </Link>
                         </button>
                     </div>
                 </div>

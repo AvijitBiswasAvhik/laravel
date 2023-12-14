@@ -19,17 +19,21 @@ const StateContext = createContext({
     addQty: () => {},
     totalPrice: {},
     deleteCartItem: () =>{},
+    verified: {},
+    setVerified: () => {},
 });
 
 export function ContextProvider({ children }) {
     const [cart, setCart] = useState([]);
     const [menu, setMenu] = useState([
-        "Home",
-        "Men",
-        "Women",
-        "Bags",
-        "Outdoor",
+        "home",
+        "men",
+        "women",
+        "bags",
+        "outdoor",
+        "orders",
     ]);
+    const [verified, setVerified] = useState();
     let [buyerData, setBuyerData] = useState(null);
     let [styles, setStyles] = useState(false);
     let [cartData, setCartData] = useState(null);
@@ -73,13 +77,17 @@ export function ContextProvider({ children }) {
             .get("/cart-data")
             .then((response) => {
                 setCartData(response.data);
+                setVerified(true);
             })
             .catch((error) => {
                 
                 if (localStorage.getItem("TOKEN") == null || styles === true) {
                     setStyles(!styles);
                 }
-                console.log(error.message);
+                console.log(error.response.data.error);
+                if(error.response.data.error == 'unverified') {
+                    setVerified(false);
+                }
             });
     }, []);
     let addQty = (id, value, buyer, order) => {
@@ -121,6 +129,7 @@ export function ContextProvider({ children }) {
                 addQty,
                 totalPrice,
                 deleteCartItem,
+                verified,
             }}
         >
             {children}

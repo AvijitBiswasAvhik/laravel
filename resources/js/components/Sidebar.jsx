@@ -84,10 +84,7 @@ export default function Sidebar(components) {
                                 id="1"
                                 data-id="ProductList"
                             >
-                                <Link
-                                    to="/product-list"
-                                    className="nav-link"
-                                >
+                                <Link to="/product-list" className="nav-link">
                                     product list
                                 </Link>
                             </li>
@@ -147,8 +144,36 @@ export default function Sidebar(components) {
                     </div>
                 </li>
                 <li className="sidebar-menu">
-                    <FontAwesomeIcon icon={faClipboard} />
-                    <span>Orders</span>
+                    <a
+                        href=""
+                        className="m-link"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#menu-order"
+                    >
+                        <FontAwesomeIcon icon={faClipboard} />
+                        <span>Orders</span>
+                    </a>
+                    <ul
+                        id="menu-order"
+                        className="sub-menu collapse"
+                        onClick={(e) => activeLink(e)}
+                    >
+                        <li className="nab-item" id="1">
+                            <Link to="/refund" className="nav-link">
+                                Refund
+                            </Link>
+                        </li>
+                        <li className="nab-item" id="2" data-id>
+                            <a href="#" className="nav-link">
+                                category edith
+                            </a>
+                        </li>
+                        <li className="nab-item" id="3">
+                            <a href="#" className="nav-link">
+                                category add
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <li className="sidebar-menu">
                     <FontAwesomeIcon icon={faPerson} />

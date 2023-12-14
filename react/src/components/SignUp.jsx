@@ -4,7 +4,7 @@ import { ContextProvider, useStateContext } from "../context/ContextProvider";
 import "../assets/css/Login.css";
 import axiosClient from "../axisos";
 
-export default function SignUp() {
+export default function SignUp({ getSignup,getLogin }) {
     let [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -16,21 +16,26 @@ export default function SignUp() {
     let makeLogin = (e) => {
         e.preventDefault();
         setError({});
+        console.log('dfgedf');
         axiosClient
             .post("/signup", formData)
             .then((response) => {
+
                 //console.log(response.data);
                 let data = response.data;
                 console.log(data.token);
-                localStorage.setItem("TOKEN", data.token);
-                addToCart();
-                navigate("/product/Home");
+                if (data.token != undefined) {
+                    localStorage.setItem("TOKEN", data.token);
+                    localStorage.setItem("LOGIN", true);
+                    //addToCart();
+                    getLogin(true)
+                }
             })
             .catch((error) => {
                 let errors = error.response.data.errors;
                 localStorage.removeItem("TOKEN");
                 // Log the errors to the console for debugging
-
+                getLogin(false);
                 // Create an error object to store the error messages
                 let errorObj = {};
 
@@ -153,12 +158,7 @@ export default function SignUp() {
                     </button>
                 </form>
                 <div>
-                    <p>
-                        Don't have an account?{" "}
-                        <Link to={"/signup"} style={{ textDecoration: "none" }}>
-                            Sign in
-                        </Link>
-                    </p>
+                    <p >Don't have an account?<span className="login-button btn btn-outline" onClick={()=>{getSignup(false)}}>Sign in</span></p>
                 </div>
             </div>
         </div>

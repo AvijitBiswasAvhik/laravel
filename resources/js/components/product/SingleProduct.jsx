@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "../../../css/product/SingleProduct.css";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import axiosClient from "../../axios";
 import { Link } from "react-router-dom";
 
 export default function SingleProduct() {
     let [data, setData] = useState();
     let { id } = useParams();
     useEffect(() => {
-        axios
+        axiosClient
             .get(`/single-product-get/${id}`)
             .then((response) => {
                 console.log(response.data);

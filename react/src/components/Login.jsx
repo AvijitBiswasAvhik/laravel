@@ -4,7 +4,7 @@ import "../assets/css/Login.css";
 import { ContextProvider, useStateContext } from "../context/ContextProvider";
 import axiosClient from "../axisos";
 
-export default function Login() {
+export default function Login({ getLogin, getSignup }) {
     let [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -12,7 +12,6 @@ export default function Login() {
     });
     let [error, setError] = useState();
     let { styles, addToCart } = useStateContext(ContextProvider);
-    console.log(styles);
     let makeLogin = (e) => {
         e.preventDefault();
         setError({});
@@ -21,13 +20,20 @@ export default function Login() {
             .then((response) => {
                 //console.log(response.data);
                 let data = response.data;
-                console.log(data.token);
-                localStorage.setItem("TOKEN", data.token);
-                addToCart();
+                // console.log(data.token);
+                if (data.token != undefined) {
+                    localStorage.setItem("TOKEN", data.token);
+                    localStorage.setItem("LOGIN", true);
+                    getLogin(true);
+                    //addToCart()
+                }
             })
             .catch((error) => {
+                console.log(errors);
                 let errors = error.response.data.errors;
+                c
                 localStorage.removeItem("TOKEN");
+                getLogin(false);
                 // Log the errors to the console for debugging
 
                 // Create an error object to store the error messages
@@ -64,7 +70,7 @@ export default function Login() {
                         <span aria-hidden="true">&times;</span>
                     </button>
 
-                    <div className="form-group">
+                    {/* <div className="form-group">
                         <label htmlFor="exampleInputName">Full Name</label>
                         <input
                             type="text"
@@ -82,7 +88,7 @@ export default function Login() {
                         <small id="emailHelp" className="form-text text-danger">
                             {error && error.name}
                         </small>
-                    </div>
+                    </div> */}
                     <div className="form-group">
                         <label htmlFor="exampleInputEmail1">
                             Email address
@@ -152,7 +158,7 @@ export default function Login() {
                     </button>
                 </form>
                 <div>
-                    <p>Don't have an account? <Link to={'/signup'} style={{'textDecoration': 'none'}}>Sign in</Link></p>
+                    <p>Don't have an account? <span className="login-button btn btn-outline" onClick={()=>{getSignup(true)}}>Sign in</span></p>
                 </div>
             </div>
         </div>

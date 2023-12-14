@@ -5,9 +5,10 @@ import Sidebar from "./Sidebar";
 import SubDashboard from "./SubDashboard";
 import Header from "./Header";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SingleProduct from "../components/product/SingleProduct";
+import SingleProduct from "./product/SingleProduct";
 import ProductAdd from "./product/ProductAdd";
 import ProductList from "./product/ProductList";
+import Refund from "./Refund";
 
 import {
     faSearch,
@@ -93,6 +94,10 @@ export default function Dashboard() {
                                 <Route
                                     path="/single-product/:id/edit"
                                     element={<ProductAdd />}
+                                />
+                                <Route
+                                    path="/refund"
+                                    element={<Refund />}
                                 />
                             </Routes>
                         </div>

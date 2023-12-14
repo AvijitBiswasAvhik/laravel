@@ -23,4 +23,4 @@ if (document.getElementById('app')) {
             <Dashboard />
         </React.StrictMode>
     );
-}
+};
